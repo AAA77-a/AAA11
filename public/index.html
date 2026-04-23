@@ -965,8 +965,44 @@ city
             const skill = skillData[skillId];
             const testResultElement = document.getElementById('test-result');
             
+            let hint = '';
+            switch(skillId) {
+                case 1:
+                    hint = `<p>提示：使用 df.head(n) 函数可以查看数据的前 n 行，其中 n 是要显示的行数。例如，查看前 3 行的代码是：df.head(3)</p>`;
+                    break;
+                case 2:
+                    hint = `<p>提示：使用 loc 函数可以基于条件进行筛选。例如，筛选年龄大于 30 且城市为北京的行的代码是：df.loc[(df['age'] > 30) & (df['city'] == '北京')]</p>`;
+                    break;
+                case 3:
+                    hint = `<p>提示：使用 fillna() 函数可以填充缺失值。例如，用均值填充数值列的代码是：df['列名'].fillna(df['列名'].mean(), inplace=True)</p>`;
+                    break;
+                case 4:
+                    hint = `<p>提示：使用 groupby() 函数可以按指定列分组，然后使用 mean() 函数计算平均值。例如，按城市分组计算平均工资的代码是：df.groupby('city')['salary'].mean()</p>`;
+                    break;
+                case 5:
+                    hint = `<p>提示：使用 pd.merge() 函数可以对两个数据框进行连接。例如，内连接的代码是：pd.merge(df1, df2, on='id', how='inner')</p>`;
+                    break;
+                case 6:
+                    hint = `<p>提示：可以通过赋值的方式创建新列。例如，计算总工资的代码是：df['totalSalary'] = df['baseSalary'] + df['baseSalary'] * df['bonusRate']</p>`;
+                    break;
+                case 7:
+                    hint = `<p>提示：使用 sort_values() 函数可以对数据框进行排序。例如，按数学成绩降序排序的代码是：df.sort_values('math', ascending=False)</p>`;
+                    break;
+                case 8:
+                    hint = `<p>提示：使用 str.split() 函数可以分割字符串。例如，提取邮箱用户名部分的代码是：df['email'].str.split('@').str[0]</p>`;
+                    break;
+                case 9:
+                    hint = `<p>提示：使用 resample() 函数可以对时间序列数据进行重采样。例如，按月计算销售总额的代码是：df.resample('M', on='date')['sales'].sum()</p>`;
+                    break;
+                case 10:
+                    hint = `<p>提示：使用 pd.pivot_table() 函数可以创建数据透视表。例如，按城市和产品计算平均销售额的代码是：pd.pivot_table(df, values='sales', index='city', columns='product', aggfunc='mean')</p>`;
+                    break;
+                default:
+                    hint = `<p>提示：使用 Pandas 相关函数完成任务</p>`;
+            }
+            
             testResultElement.className = 'test-result';
-            testResultElement.innerHTML = `<p>提示：使用 Pandas 相关函数完成任务</p>`;
+            testResultElement.innerHTML = hint;
         }
     </script>
 </body>
