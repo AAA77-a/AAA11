@@ -7,3 +7,4 @@ workers_dev = false
 [build]
 command = ""
 publish = "public"
+build_command = ""
