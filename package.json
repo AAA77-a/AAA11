@@ -1,0 +1,11 @@
+{
+  "name": "pandas-training-camp",
+  "version": "1.0.0",
+  "description": "Pandas 实战训练营：十项核心技能",
+  "scripts": {
+    "build": "echo 'Building project...'"
+  },
+  "keywords": ["pandas", "data-analysis", "learning"],
+  "author": "Student",
+  "license": "MIT"
+}
