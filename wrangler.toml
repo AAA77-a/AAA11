@@ -8,3 +8,4 @@ workers_dev = false
 command = ""
 publish = "public"
 build_command = ""
+pages_build_output_dir = "public"
