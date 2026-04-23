@@ -1,0 +1,9 @@
+name = "pandas-training-camp"
+compatibility_date = "2026-04-23"
+
+[env.production]
+workers_dev = false
+
+[build]
+command = ""
+publish = "public"
