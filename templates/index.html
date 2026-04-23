@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pandas 实战训练营：十项核心技能</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 头部样式 */
+        .header {
+            background: linear-gradient(135deg, #4CAF50, #2196F3);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        /* 主内容布局 */
+        .main-content {
+            display: flex;
+            gap: 30px;
+        }
+
+        /* 侧边栏样式 */
+        .sidebar {
+            flex: 0 0 250px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .sidebar h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .skill-list {
+            list-style: none;
+        }
+
+        .skill-item {
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .skill-item:hover {
+            background-color: #f0f4f8;
+            border-left-color: #2196F3;
+        }
+
+        .skill-item.active {
+            background-color: #e3f2fd;
+            border-left-color: #2196F3;
+            font-weight: 500;
+        }
+
+        /* 主内容区域 */
+        .content {
+            flex: 1;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .skill-content h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        /* 模式切换 */
+        .mode-switch {
+            display: flex;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: #f0f4f8;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .mode-btn:hover {
+            background: #e0e7ff;
+        }
+
+        .mode-btn.active {
+            background: #2196F3;
+            color: white;
+        }
+
+        /* 数据表格 */
+        .data-section {
+            margin-bottom: 30px;
+        }
+
+        .data-section h3 {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .data-table {
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .data-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th, .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .data-table th {
+            background-color: #f5f7fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .data-table tr:hover {
+            background-color: #f9fafb;
+        }
+
+        /* 介绍区域 */
+        .intro-section {
+            margin-bottom: 30px;
+        }
+
+        .intro-section h3 {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .intro-content {
+            background-color: #f0f7ff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            line-height: 1.6;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .intro-content p {
+            margin-bottom: 10px;
+        }
+
+        .intro-content ul {
+            margin-left: 20px;
+            margin-bottom: 10px;
+        }
+
+        .intro-content li {
+            margin-bottom: 5px;
+        }
+
+        /* 代码区域 */
+        .code-section {
+            margin-bottom: 30px;
+        }
+
+        .code-section h3 {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        /* 结果区域 */
+        .result-section {
+            margin-bottom: 30px;
+        }
+
+        .result-section h3 {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .result-content {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        /* 测试区域 */
+        .test-section {
+            margin-top: 20px;
+        }
+
+        .test-section h3 {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .test-task {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .code-input-section h4 {
+            color: #666;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .code-input {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 150px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .test-buttons {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .run-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .run-btn:hover {
+            background-color: #45a049;
+        }
+
+        .reset-btn {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .reset-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .hint-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .hint-btn:hover {
+            background-color: #1976D2;
+        }
+
+        .test-result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .test-result.success {
+            background-color: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+
+        .test-result.error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                flex: 1;
+                position: relative;
+                top: 0;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mode-content {
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a1a1a1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部标题 -->
+        <header class="header">
+            <h1>Pandas 实战训练营：十项核心技能</h1>
+        </header>
+        
+        <div class="main-content">
+            <!-- 左侧导航栏 -->
+            <nav class="sidebar">
+                <h2>知识点导航</h2>
+                <ul class="skill-list">
+                    <li class="skill-item active" data-skill="1">1. 数据加载与查看</li>
+                    <li class="skill-item" data-skill="2">2. 数据筛选与索引</li>
+                    <li class="skill-item" data-skill="3">3. 处理缺失值</li>
+                    <li class="skill-item" data-skill="4">4. 数据分组与聚合</li>
+                    <li class="skill-item" data-skill="5">5. 数据合并与连接</li>
+                    <li class="skill-item" data-skill="6">6. 新增与修改列</li>
+                    <li class="skill-item" data-skill="7">7. 数据排序与排名</li>
+                    <li class="skill-item" data-skill="8">8. 字符串处理</li>
+                    <li class="skill-item" data-skill="9">9. 时间序列基础</li>
+                    <li class="skill-item" data-skill="10">10. 数据透视表</li>
+                </ul>
+            </nav>
+            
+            <!-- 主内容区域 -->
+            <main class="content">
+                <div class="skill-content" id="skill-content">
+                    <h2 id="skill-title">知识点 1：数据加载与查看</h2>
+                    
+                    <!-- 模式切换 -->
+                    <div class="mode-switch">
+                        <button class="mode-btn active" data-mode="train">训练模式</button>
+                        <button class="mode-btn" data-mode="test">测试模式</button>
+                    </div>
+                    
+                    <!-- 训练模式内容 -->
+                    <div class="mode-content train-content">
+                        <div class="intro-section">
+                            <h3>知识点介绍</h3>
+                            <div class="intro-content" id="skill-intro"></div>
+                        </div>
+                        
+                        <div class="data-section">
+                            <h3>示例数据</h3>
+                            <div class="data-table" id="train-data"></div>
+                        </div>
+                        
+                        <div class="code-section">
+                            <h3>代码示例</h3>
+                            <pre class="code-block" id="train-code"></pre>
+                        </div>
+                        
+                        <div class="result-section">
+                            <h3>运行结果</h3>
+                            <div class="result-content" id="train-result"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 测试模式内容 -->
+                    <div class="mode-content test-content" style="display: none;">
+                        <div class="data-section">
+                            <h3>示例数据</h3>
+                            <div class="data-table" id="test-data"></div>
+                        </div>
+                        
+                        <div class="test-section">
+                            <h3>测试任务</h3>
+                            <p class="test-task" id="test-task"></p>
+                            
+                            <div class="code-input-section">
+                                <h4>请输入你的代码</h4>
+                                <textarea class="code-input" id="code-input" placeholder="在此输入你的 Pandas 代码..."></textarea>
+                            </div>
+                            
+                            <div class="test-buttons">
+                                <button class="btn run-btn" id="run-btn">运行代码</button>
+                                <button class="btn reset-btn" id="reset-btn">重置</button>
+                                <button class="btn hint-btn" id="hint-btn">显示提示</button>
+                            </div>
+                            
+                            <div class="test-result" id="test-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <script>
+        // 知识点数据
+        const skillData = {
+            1: {
+                title: "数据加载与查看",
+                introduction: "数据加载与查看是 Pandas 数据分析的基础操作。通过这些操作，我们可以了解数据的基本结构、字段含义和数据质量，为后续的分析工作做好准备。\n\n核心操作包括：\n1. 从不同来源加载数据（CSV、Excel、数据库等）\n2. 查看数据的前几行或后几行\n3. 查看数据的基本信息（数据类型、缺失值等）\n4. 查看数据的统计摘要",
+                trainCode: `# 导入 pandas
+import pandas as pd
+
+# 查看前 5 行
+df.head()
+
+# 查看数据信息
+df.info()`,
+                trainResult: `前 5 行：
+   name  age city  salary
+0   张三   25  北京    8000
+1   李四   30  上海   12000
+2   王五   35  广州   15000
+3   赵六   40  深圳   20000
+4   钱七   45  杭州   18000
+
+数据信息：
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 5 entries, 0 to 4
+Data columns (total 4 columns):
+ #   Column  Non-Null Count  Dtype
+---  ------  --------------  -----
+ 0   name    5 non-null      object
+ 1   age     5 non-null      int64
+ 2   city    5 non-null      object
+ 3   salary  5 non-null      int64
+dtypes: int64(2), object(2)
+memory usage: 288.0+ bytes`,
+                testTask: "写出查看数据前 3 行的代码"
+            },
+            2: {
+                title: "数据筛选与索引",
+                introduction: "数据筛选与索引是 Pandas 中非常重要的操作，允许我们根据特定条件提取数据的子集。这对于数据分析、数据清洗和特征工程都至关重要。\n\n核心操作包括：\n1. 使用 loc 基于标签进行筛选\n2. 使用 iloc 基于位置进行索引\n3. 使用布尔条件进行筛选\n4. 组合多个条件进行复杂筛选",
+                trainCode: `# 使用 loc 基于标签筛选
+df.loc[df['age'] > 30]
+
+# 使用 iloc 基于位置索引
+df.iloc[0:3, 0:2]
+
+# 组合条件筛选
+df.loc[(df['age'] > 30) & (df['city'] == '北京')]`,
+                trainResult: `年龄大于 30 的行：
+   name  age city  salary
+2   王五   35  北京   15000
+3   赵六   40  深圳   20000
+4   钱七   45  北京   18000
+
+前 3 行的前 2 列：
+   name  age
+0   张三   25
+1   李四   30
+2   王五   35
+
+年龄大于 30 且城市为北京的行：
+   name  age city  salary
+2   王五   35  北京   15000
+4   钱七   45  北京   18000`,
+                testTask: "选出年龄大于 30 且城市为北京的行"
+            },
+            3: {
+                title: "处理缺失值",
+                introduction: "缺失值是实际数据中常见的问题，会影响分析结果的准确性。Pandas 提供了多种处理缺失值的方法，帮助我们应对数据不完整的情况。\n\n核心操作包括：\n1. 检测缺失值（isnull、notnull）\n2. 删除包含缺失值的行或列（dropna）\n3. 填充缺失值（fillna）\n4. 插值方法处理缺失值（interpolate）",
+                trainCode: `# 检查缺失值
+df.isnull().sum()
+
+# 用均值填充数值列
+df['age'].fillna(df['age'].mean(), inplace=True)
+df['salary'].fillna(df['salary'].mean(), inplace=True)
+df`,
+                trainResult: `缺失值统计：
+age      2
+city     1
+salary   1
+dtype: int64
+
+填充后的结果：
+   name        age city        salary
+0   张三  25.000000  北京   8000.00000
+1   李四  33.333333  上海  12000.0000
+2   王五  35.000000  北京  14500.0000
+3   赵六  40.000000  深圳  20000.0000
+4   钱七  33.333333  杭州  18000.0000`,
+                testTask: "用均值填充数值列的缺失值"
+            },
+            4: {
+                title: "数据分组与聚合",
+                introduction: "数据分组与聚合是数据分析中的核心操作，允许我们按特定维度对数据进行分组，并计算各组的统计指标。这对于理解数据的分布和特征非常重要。\n\n核心操作包括：\n1. 按一个或多个字段分组（groupby）\n2. 应用聚合函数（mean、sum、count、max、min 等）\n3. 多个聚合函数的同时应用（agg）\n4. 分组后的转换操作（transform）",
+                trainCode: `# 按城市分组计算平均工资
+df.groupby('city')['salary'].mean()
+
+# 按城市和部门分组计算总工资
+df.groupby(['city', 'department'])['salary'].sum()`,
+                trainResult: `按城市分组计算平均工资：
+city
+北京    13666.666667
+上海    11000.000000
+深圳    18000.000000
+Name: salary, dtype: float64
+
+按城市和部门分组计算总工资：
+city  department
+北京    技术         23000
+      市场         18000
+上海    技术         10000
+      销售         12000
+深圳    市场         16000
+      销售         20000
+Name: salary, dtype: int64`,
+                testTask: "按城市分组计算平均工资"
+            },
+            5: {
+                title: "数据合并与连接",
+                introduction: "数据合并与连接是将多个数据源整合在一起的重要操作。在实际分析中，我们经常需要将来自不同来源的数据组合成一个完整的数据集。\n\n核心操作包括：\n1. 内连接（inner join）- 只保留两个表中都存在的记录\n2. 左连接（left join）- 保留左表所有记录，右表匹配不到的为缺失值\n3. 右连接（right join）- 保留右表所有记录，左表匹配不到的为缺失值\n4. 外连接（outer join）- 保留两个表的所有记录，匹配不到的为缺失值",
+                trainCode: `# 内连接
+pd.merge(df1, df2, on='id', how='inner')
+
+# 左连接
+pd.merge(df1, df2, on='id', how='left')`,
+                trainResult: `内连接：
+   id name department  salary city
+0   1  张三         技术    8000  北京
+1   2  李四         销售   12000  上海
+2   3  王五         技术   15000  北京
+
+左连接：
+   id name department   salary  city
+0   1  张三         技术   8000.0   北京
+1   2  李四         销售  12000.0   上海
+2   3  王五         技术  15000.0   北京
+3   4  赵六         销售      NaN  NaN
+4   5  钱七         市场      NaN  NaN`,
+                testTask: "对两个数据框进行内连接"
+            },
+            6: {
+                title: "新增与修改列",
+                introduction: "在数据分析过程中，我们经常需要根据现有数据创建新的特征或修改现有列的值。这对于特征工程和数据转换非常重要。\n\n核心操作包括：\n1. 基于现有列计算新列\n2. 直接赋值创建新列\n3. 使用 apply 函数进行复杂转换\n4. 条件赋值修改列值",
+                trainCode: `# 新增奖金列
+df['bonus'] = df['baseSalary'] * df['bonusRate']
+
+# 新增总工资列
+df['totalSalary'] = df['baseSalary'] + df['bonus']
+df`,
+                trainResult: `   name  baseSalary  bonusRate   bonus  totalSalary
+0   张三        8000        0.1   800.0       8800.0
+1   李四       12000        0.15  1800.0      13800.0
+2   王五       15000        0.2   3000.0      18000.0
+3   赵六       20000        0.25  5000.0      25000.0
+4   钱七       18000        0.2   3600.0      21600.0`,
+                testTask: "计算总工资（基本工资 + 基本工资 * 奖金比例）并赋值给新列"
+            },
+            7: {
+                title: "数据排序与排名",
+                introduction: "数据排序与排名是数据分析中的基本操作，帮助我们了解数据的顺序关系和相对位置。这对于识别极端值、理解数据分布和生成排行榜等场景非常重要。\n\n核心操作包括：\n1. 按单个或多个列排序（sort_values）\n2. 按索引排序（sort_index）\n3. 计算排名（rank）\n4. 处理排名中的平局情况",
+                trainCode: `# 按数学成绩降序排序
+df.sort_values('math', ascending=False)
+
+# 计算总分并排名
+df['total'] = df['chinese'] + df['math'] + df['english']
+df['totalRank'] = df['total'].rank(ascending=False, method='dense')
+df.sort_values('totalRank')`,
+                trainResult: `按数学成绩降序排序：
+   name  chinese  math  english
+2   王五       78    95       85
+4   钱七       88    92       86
+0   张三       85    90       88
+3   赵六       95    88       92
+1   李四       92    85       90
+
+计算总分并排名：
+   name  chinese  math  english  total  totalRank
+3   赵六       95    88       92    275        1.0
+1   李四       92    85       90    267        2.0
+4   钱七       88    92       86    266        3.0
+0   张三       85    90       88    263        4.0
+2   王五       78    95       85    258        5.0`,
+                testTask: "按数学成绩降序排序"
+            },
+            8: {
+                title: "字符串处理",
+                introduction: "字符串处理是数据清洗和特征工程中的重要环节。Pandas 提供了丰富的字符串处理函数，方便我们对文本数据进行各种操作。\n\n核心操作包括：\n1. 字符串分割（split）\n2. 字符串提取（extract）\n3. 字符串替换（replace）\n4. 字符串匹配（contains）\n5. 字符串大小写转换（upper、lower、title）",
+                trainCode: `# 提取邮箱域名
+df['emailDomain'] = df['email'].str.split('@').str[1]
+
+# 提取邮箱用户名部分
+df['email'].str.split('@').str[0]`,
+                trainResult: `提取邮箱域名：
+   name               email       phone emailDomain
+0   张三  zhangsan@example.com  13812345678  example.com
+1   李四      lisi@company.com  13987654321  company.com
+2   王五       wangwu@gmail.com  13712345678    gmail.com
+3   赵六        zhaoliu@test.org  13687654321     test.org
+4   钱七      qianqi@domain.net  13512345678   domain.net
+
+提取邮箱用户名部分：
+0    zhangsan
+1        lisi
+2      wangwu
+3     zhaoliu
+4      qianqi
+Name: email, dtype: object`,
+                testTask: "提取邮箱列的用户名部分"
+            },
+            9: {
+                title: "时间序列基础",
+                introduction: "时间序列分析是数据分析中的重要领域，涉及到时间相关数据的处理和分析。Pandas 提供了强大的时间序列处理功能，支持日期时间类型的转换、操作和分析。\n\n核心操作包括：\n1. 日期时间类型转换（to_datetime）\n2. 日期组件提取（year、month、day、hour 等）\n3. 时间索引创建和操作\n4. 时间序列重采样（resample）\n5. 时间差计算",
+                trainCode: `# 转换为日期时间类型
+df['date'] = pd.to_datetime(df['date'])
+
+# 提取年份、月份、日
+df['year'] = df['date'].dt.year
+df['month'] = df['date'].dt.month
+df['day'] = df['date'].dt.day
+
+# 按月重采样计算总销售额
+df.resample('M', on='date')['sales'].sum()`,
+                trainResult: `转换并提取日期组件：
+        date  sales  customers  year  month  day
+0 2023-01-01   1200         50  2023      1    1
+1 2023-01-02   1500         60  2023      1    2
+2 2023-01-03   1800         70  2023      1    3
+3 2023-01-04   1300         55  2023      1    4
+4 2023-01-05   1600         65  2023      1    5
+
+按月重采样计算总销售额：
+date
+2023-01-31    16100
+Freq: M, Name: sales, dtype: int64`,
+                testTask: "计算每月销售总额"
+            },
+            10: {
+                title: "数据透视表",
+                introduction: "数据透视表是一种强大的数据分析工具，允许我们从多个维度对数据进行汇总和分析。它可以帮助我们快速理解数据的结构和关系，发现隐藏的模式和趋势。\n\n核心操作包括：\n1. 创建基础数据透视表（pivot_table）\n2. 选择聚合函数（aggfunc）\n3. 处理行和列的多级索引\n4. 处理缺失值\n5. 多个值的同时分析",
+                trainCode: `# 基础数据透视表：按城市和产品计算平均销售额
+pd.pivot_table(df, values='sales', index='city', columns='product', aggfunc='mean')
+
+# 多值数据透视表：同时计算销售额和利润
+pd.pivot_table(df, values=['sales', 'profit'], index='city', columns='product', aggfunc='mean')`,
+                trainResult: `按城市和产品计算平均销售额：
+product      A      B      C
+city
+北京     1000.0  1600.0    NaN
+上海     1300.0  1500.0    NaN
+广州     1200.0    NaN  1900.0
+深圳       NaN  1400.0  1800.0
+
+同时计算销售额和利润：
+          sales                profit              
+product      A      B      C      A      B      C
+city                                               
+北京     1000.0  1600.0    NaN  200.0  320.0    NaN
+上海     1300.0  1500.0    NaN  260.0  300.0    NaN
+广州     1200.0    NaN  1900.0  240.0    NaN  380.0
+深圳       NaN  1400.0  1800.0    NaN  280.0  360.0`,
+                testTask: "按城市和产品计算平均销售额"
+            }
+        };
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化显示第一个知识点
+            loadSkill(1);
+            
+            // 知识点切换事件
+            document.querySelectorAll('.skill-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const skillId = parseInt(this.dataset.skill);
+                    loadSkill(skillId);
+                    
+                    // 更新活跃状态
+                    document.querySelectorAll('.skill-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // 模式切换事件
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const mode = this.dataset.mode;
+                    switchMode(mode);
+                    
+                    // 更新活跃状态
+                    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // 测试模式按钮事件
+            document.getElementById('run-btn').addEventListener('click', runCode);
+            document.getElementById('reset-btn').addEventListener('click', resetTest);
+            document.getElementById('hint-btn').addEventListener('click', showHint);
+        });
+
+        // 加载知识点
+        function loadSkill(skillId) {
+            const skill = skillData[skillId];
+            if (!skill) return;
+            
+            // 更新标题
+            document.getElementById('skill-title').textContent = `知识点 ${skillId}：${skill.title}`;
+            
+            // 渲染知识点介绍
+            const introContent = document.getElementById('skill-intro');
+            if (skill.introduction) {
+                // 将换行符转换为HTML换行和列表
+                let introHtml = skill.introduction
+                    .replace(/\n\n/g, '</p><p>')
+                    .replace(/\n(\d+\. )/g, '</p><ul><li>$1')
+                    .replace(/\n/g, '</li><li>')
+                    .replace(/<\/li><li>$/, '</li></ul>')
+                    .replace(/^/, '<p>')
+                    .replace(/$/, '</p>');
+                introContent.innerHTML = introHtml;
+            } else {
+                introContent.innerHTML = '<p>暂无介绍内容</p>';
+            }
+            
+            // 加载数据
+            loadData(skillId);
+            
+            // 渲染训练模式内容
+            document.getElementById('train-code').textContent = skill.trainCode;
+            document.getElementById('train-result').textContent = skill.trainResult;
+            
+            // 渲染测试模式内容
+            document.getElementById('test-task').textContent = skill.testTask;
+            
+            // 清空代码输入框
+            document.getElementById('code-input').value = '';
+            
+            // 清空测试结果
+            document.getElementById('test-result').innerHTML = '';
+            document.getElementById('test-result').className = 'test-result';
+            
+            // 默认显示训练模式
+            switchMode('train');
+        }
+
+        // 加载数据
+        function loadData(skillId) {
+            fetch(`/api/data/${skillId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        if (skillId === 5) {
+                            // 特殊处理数据合并与连接
+                            document.getElementById('train-data').innerHTML = `
+                                <h4>数据框 1：</h4>
+                                ${renderTable(data.data1)}
+                                <h4 style="margin-top: 20px;">数据框 2：</h4>
+                                ${renderTable(data.data2)}
+                            `;
+                            document.getElementById('test-data').innerHTML = `
+                                <h4>数据框 1：</h4>
+                                ${renderTable(data.data1)}
+                                <h4 style="margin-top: 20px;">数据框 2：</h4>
+                                ${renderTable(data.data2)}
+                            `;
+                        } else {
+                            document.getElementById('train-data').innerHTML = renderTable(data.data);
+                            document.getElementById('test-data').innerHTML = renderTable(data.data);
+                        }
+                    }
+                });
+        }
+
+        // 切换模式
+        function switchMode(mode) {
+            const trainContent = document.querySelector('.train-content');
+            const testContent = document.querySelector('.test-content');
+            
+            if (mode === 'train') {
+                trainContent.style.display = 'block';
+                testContent.style.display = 'none';
+            } else {
+                trainContent.style.display = 'none';
+                testContent.style.display = 'block';
+            }
+        }
+
+        // 渲染表格
+        function renderTable(data) {
+            if (!data || data.length === 0) return '<p>无数据</p>';
+            
+            const headers = Object.keys(data[0]);
+            let tableHtml = '<table>';
+            
+            // 表头
+            tableHtml += '<thead><tr>';
+            headers.forEach(header => {
+                tableHtml += `<th>${header}</th>`;
+            });
+            tableHtml += '</tr></thead>';
+            
+            // 表体
+            tableHtml += '<tbody>';
+            data.forEach(row => {
+                tableHtml += '<tr>';
+                headers.forEach(header => {
+                    const value = row[header] === null || row[header] === 'null' ? 'NaN' : row[header];
+                    tableHtml += `<td>${value}</td>`;
+                });
+                tableHtml += '</tr>';
+            });
+            tableHtml += '</tbody></table>';
+            
+            return tableHtml;
+        }
+
+        // 运行代码
+        function runCode() {
+            const skillId = parseInt(document.querySelector('.skill-item.active').dataset.skill);
+            const code = document.getElementById('code-input').value;
+            const testResultElement = document.getElementById('test-result');
+            
+            if (!code.trim()) {
+                testResultElement.className = 'test-result error';
+                testResultElement.textContent = '❌ 请输入代码！';
+                return;
+            }
+            
+            // 显示加载状态
+            testResultElement.className = 'test-result';
+            testResultElement.textContent = '运行中...';
+            
+            // 发送代码到服务器执行
+            fetch('/api/execute', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    code: code,
+                    skill_id: skillId
+                })
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 'success') {
+                    testResultElement.className = 'test-result success';
+                    testResultElement.textContent = result.output;
+                } else {
+                    testResultElement.className = 'test-result error';
+                    testResultElement.textContent = `❌ 代码执行出错：${result.output}`;
+                }
+            })
+            .catch(error => {
+                testResultElement.className = 'test-result error';
+                testResultElement.textContent = `❌ 请求失败：${error.message}`;
+            });
+        }
+
+        // 重置测试
+        function resetTest() {
+            document.getElementById('code-input').value = '';
+            const testResultElement = document.getElementById('test-result');
+            testResultElement.innerHTML = '';
+            testResultElement.className = 'test-result';
+        }
+
+        // 显示提示
+        function showHint() {
+            const skillId = parseInt(document.querySelector('.skill-item.active').dataset.skill);
+            const skill = skillData[skillId];
+            const testResultElement = document.getElementById('test-result');
+            
+            testResultElement.className = 'test-result';
+            testResultElement.innerHTML = `<p>提示：使用 Pandas 相关函数完成任务</p>`;
+        }
+    </script>
+</body>
+</html>
