@@ -498,36 +498,96 @@
         // 知识点数据
         const skillData = {
             1: {
-                title: "数据加载与查看",
-                introduction: "数据加载与查看是 Pandas 数据分析的基础操作。通过这些操作，我们可以了解数据的基本结构、字段含义和数据质量，为后续的分析工作做好准备。\n\n核心操作包括：\n1. 从不同来源加载数据（CSV、Excel、数据库等）\n2. 查看数据的前几行或后几行\n3. 查看数据的基本信息（数据类型、缺失值等）\n4. 查看数据的统计摘要",
-                trainCode: `# 导入 pandas
+                title: "数据加载与基础查看",
+                introduction: "数据加载与查看是 Pandas 数据分析的基础操作，是数据分析的第一步。通过这些操作，我们可以了解数据的基本结构、字段含义和数据质量，为后续的分析工作做好准备。\n\n核心操作包括：\n1. 从不同来源加载数据（Excel、CSV、TXT等）\n2. 查看数据的前几行或后几行\n3. 查看数据的基本信息（数据类型、缺失值等）\n4. 查看数据的统计摘要\n5. 检查缺失值和重复数据\n\n学习目标：\n- 熟练掌握 Pandas 主流外部数据文件加载方法\n- 掌握 DataFrame 表格结构基础查看语法\n- 学会快速排查数据异常\n- 建立数据分析标准开局流程",
+                trainCode: `# 1. 导入 pandas 库
 import pandas as pd
 
+# 2. 加载数据（示例）
+# 读取 Excel 文件
+df = pd.read_excel("销售统计.xlsx", sheet_name="销售数据")
+
+# 3. 数据查看全套流程
 # 查看前 5 行
 df.head()
 
-# 查看数据信息
-df.info()`,
-                trainResult: `前 5 行：
-   name  age city  salary
-0   张三   25  北京    8000
-1   李四   30  上海   12000
-2   王五   35  广州   15000
-3   赵六   40  深圳   20000
-4   钱七   45  杭州   18000
+# 查看后 5 行
+df.tail()
 
-数据信息：
+# 查看数据行列规模
+df.shape
+
+# 查看所有字段名
+df.columns
+
+# 查看数据完整信息
+df.info()
+
+# 查看数值型数据统计指标
+df.describe()
+
+# 统计每列缺失值数量
+df.isnull().sum()
+
+# 查看是否存在重复行
+df.duplicated().sum()`,
+                trainResult: `前 5 行：
+   姓名  年龄  城市    销售额        日期
+0  张三  25  北京   8000  2023-01-01
+1  李四  30  上海  12000  2023-01-02
+2  王五  35  广州  15000  2023-01-03
+3  赵六  40  深圳  20000  2023-01-04
+4  钱七  45  杭州  18000  2023-01-05
+
+后 5 行：
+   姓名  年龄  城市    销售额        日期
+5  孙八  28  北京   9000  2023-01-06
+6  周九  32  上海  13000  2023-01-07
+7  吴十  38  广州  16000  2023-01-08
+8  郑一  42  深圳  21000  2023-01-09
+9  王二  48  杭州  19000  2023-01-10
+
+数据行列规模：
+(10, 5)
+
+所有字段名：
+Index(['姓名', '年龄', '城市', '销售额', '日期'], dtype='object')
+
+数据完整信息：
 <class 'pandas.core.frame.DataFrame'>
-RangeIndex: 5 entries, 0 to 4
-Data columns (total 4 columns):
+RangeIndex: 10 entries, 0 to 9
+Data columns (total 5 columns):
  #   Column  Non-Null Count  Dtype
 ---  ------  --------------  -----
- 0   name    5 non-null      object
- 1   age     5 non-null      int64
- 2   city    5 non-null      object
- 3   salary  5 non-null      int64
-dtypes: int64(2), object(2)
-memory usage: 288.0+ bytes`,
+ 0   姓名    10 non-null     object
+ 1   年龄    10 non-null     int64
+ 2   城市    10 non-null     object
+ 3   销售额   10 non-null     int64
+ 4   日期    10 non-null     datetime64[ns]
+dtypes: datetime64[ns](1), int64(2), object(2)
+memory usage: 528.0+ bytes
+
+数值型数据统计指标：
+              年龄          销售额
+count  10.000000    10.000000
+mean   36.300000  14200.000000
+std     7.931583   4386.342642
+min    25.000000   8000.000000
+25%    29.500000  10500.000000
+50%    36.500000  15500.000000
+75%    41.500000  18250.000000
+max    48.000000  21000.000000
+
+缺失值统计：
+姓名      0
+年龄      0
+城市      0
+销售额     0
+日期      0
+dtype: int64
+
+重复行数量：
+0`,
                 testTask: "写出查看数据前 3 行的代码"
             },
             2: {
