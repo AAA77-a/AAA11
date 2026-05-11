@@ -1007,7 +1007,7 @@ function openLearnPage(skillId) {
     renderKnowledge(skillId);
     
     document.getElementById('codeInput').value = '';
-    document.getElementById('outputContent').innerHTML = '点击运行按钮执行代码...<br><br>💡 提示：本页面为静态演示版，代码执行功能需要配合后端服务器使用。请访问 http://127.0.0.1:8080 使用完整功能。';
+    document.getElementById('outputContent').innerHTML = '点击运行按钮执行代码...<br><br>💡 提示：你可以在左侧学习知识点，然后在右侧编写和运行 Pandas 代码进行练习。';
     updateLineNumbers();
     
     document.querySelectorAll('.mode-tab').forEach(btn => {
@@ -1101,8 +1101,50 @@ function switchLearnMode(mode) {
 }
 
 function runCode() {
+    const codeInput = document.getElementById('codeInput');
     const outputContent = document.getElementById('outputContent');
-    outputContent.innerHTML = '<span class="info">⚠️ 注意：静态页面不支持代码执行</span><br><br>本页面为静态演示版，展示了知识点和代码示例。<br><br>要使用完整的代码执行功能，请：<br>1. 运行本地服务器：python app.py<br>2. 访问 http://127.0.0.1:8080';
+    
+    if (!codeInput.value.trim()) {
+        outputContent.innerHTML = '<span class="error">❌ 请输入代码后再运行</span>';
+        return;
+    }
+    
+    outputContent.innerHTML = '<span class="info">⏳ 正在执行代码...</span>';
+    
+    fetch('/api/execute', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            code: codeInput.value,
+            skill_id: currentSkillId
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            let output = '<span class="success">✅ 代码执行成功</span><br><br>';
+            output += '<pre>' + escapeHtml(data.output) + '</pre>';
+            
+            if (data.image) {
+                output += '<br><img src="data:image/png;base64,' + data.image + '" style="max-width: 100%; border-radius: 4px;">';
+            }
+            
+            outputContent.innerHTML = output;
+        } else {
+            outputContent.innerHTML = '<span class="error">❌ 执行错误：</span><br><br><pre>' + escapeHtml(data.output) + '</pre>';
+        }
+    })
+    .catch(error => {
+        outputContent.innerHTML = '<span class="error">❌ 请求失败：' + error.message + '</span>';
+    });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 function clearCode() {
