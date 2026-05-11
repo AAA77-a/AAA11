@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模块测试</title>
+    <style>
+        .module-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        .module-card:hover {
+            border-color: #10b981;
+        }
+    </style>
+</head>
+<body>
+    <h1>十大核心技能</h1>
+    <div id="modulesGrid"></div>
+    
+    <script>
+        const skillData = {
+            1: { title: "数据加载与基础查看", description: "学习如何加载和查看数据" },
+            2: { title: "数据筛选与条件查询", description: "学习数据筛选方法" },
+            3: { title: "缺失值检测与处理", description: "学习处理缺失值" },
+            4: { title: "数据分组与聚合统计", description: "学习分组聚合" },
+            5: { title: "数据排序与排名计算", description: "学习排序和排名" },
+            6: { title: "数据透视表分析", description: "学习透视表" },
+            7: { title: "字符串数据处理", description: "学习字符串处理" },
+            8: { title: "时间序列数据处理", description: "学习时间序列" },
+            9: { title: "数据合并与连接", description: "学习数据合并" },
+            10: { title: "数据导出与保存", description: "学习数据导出" }
+        };
+        
+        console.log('skillData loaded, keys:', Object.keys(skillData));
+        console.log('Total modules:', Object.keys(skillData).length);
+        
+        function renderModules() {
+            const grid = document.getElementById('modulesGrid');
+            let html = '';
+            
+            for (let i = 1; i <= 10; i++) {
+                const skill = skillData[i];
+                html += '<div class="module-card" onclick="alert(\'模块 ' + i + ': ' + skill.title + '\')">';
+                html += '<h3>模块 ' + i + ': ' + skill.title + '</h3>';
+                html += '<p>' + skill.description + '</p>';
+                html += '</div>';
+            }
+            
+            grid.innerHTML = html;
+            console.log('Modules rendered:', html.length, 'chars');
+        }
+        
+        renderModules();
+    </script>
+</body>
+</html>

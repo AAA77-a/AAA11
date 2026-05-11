@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test</title>
+</head>
+<body>
+    <div id="test"></div>
+    <script>
+        const skillData = {
+            1: { title: "模块1" },
+            2: { title: "模块2" }
+        };
+        
+        document.getElementById('test').innerHTML = '<pre>' + JSON.stringify(skillData, null, 2) + '</pre>';
+        
+        console.log('skillData loaded:', Object.keys(skillData).length);
+    </script>
+</body>
+</html>

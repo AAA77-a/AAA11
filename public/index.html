@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pandas 数据分析实战训练营</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #ffffff; color: #333; line-height: 1.6; }
@@ -14,38 +13,23 @@
         .navbar { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #e5e7eb; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; }
         .navbar-brand { font-size: 18px; font-weight: 600; color: #10b981; display: flex; align-items: center; gap: 10px; }
         .navbar-brand-icon { width: 32px; height: 32px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 16px; }
-        .navbar-links { display: flex; gap: 8px; }
-        .navbar-link { padding: 8px 16px; color: #6b7280; text-decoration: none; font-size: 14px; font-weight: 500; border-radius: 6px; transition: all 0.2s; }
-        .navbar-link:hover { background: #f3f4f6; color: #333; }
         .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 100px 40px 80px; background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%); position: relative; overflow: hidden; }
-        .hero::before { content: ''; position: absolute; top: -50%; right: -20%; width: 800px; height: 800px; background: radial-gradient(circle, rgba(16,185,129,0.1) 0%, transparent 70%); border-radius: 50%; }
         .hero-content { max-width: 800px; text-align: center; position: relative; z-index: 1; }
-        .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: white; border: 1px solid #e5e7eb; padding: 8px 16px; border-radius: 100px; font-size: 13px; font-weight: 500; color: #059669; margin-bottom: 24px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-        .hero h1 { font-size: 56px; font-weight: 700; color: #111827; margin-bottom: 20px; letter-spacing: -1px; line-height: 1.1; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: white; border: 1px solid #e5e7eb; padding: 8px 16px; border-radius: 100px; font-size: 13px; font-weight: 500; color: #059669; margin-bottom: 24px; }
+        .hero h1 { font-size: 56px; font-weight: 700; color: #111827; margin-bottom: 20px; letter-spacing: -1px; }
         .hero h1 span { color: #10b981; }
         .hero-description { font-size: 18px; color: #6b7280; margin-bottom: 40px; max-width: 560px; margin-left: auto; margin-right: auto; }
-        .hero-cta { display: flex; gap: 12px; justify-content: center; }
-        .btn { padding: 14px 28px; border-radius: 8px; font-size: 15px; font-weight: 500; border: none; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 8px; }
+        .btn { padding: 14px 28px; border-radius: 8px; font-size: 15px; font-weight: 500; border: none; cursor: pointer; }
         .btn-primary { background: #10b981; color: white; }
-        .btn-primary:hover { background: #059669; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
-        .btn-secondary { background: white; color: #374151; border: 1px solid #e5e7eb; }
-        .btn-secondary:hover { background: #f9fafb; border-color: #d1d5db; }
-        .intro-section { padding: 100px 40px; background: white; }
-        .intro-container { max-width: 1100px; margin: 0 auto; }
-        .section-label { display: inline-block; font-size: 13px; font-weight: 600; color: #10b981; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
-        .section-header { text-align: center; margin-bottom: 60px; }
-        .section-header h2 { font-size: 36px; font-weight: 700; color: #111827; margin-bottom: 16px; }
-        .section-header p { font-size: 16px; color: #6b7280; max-width: 500px; margin: 0 auto; }
-        .intro-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-        .intro-card { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 28px; transition: all 0.3s ease; }
-        .intro-card:hover { border-color: #10b981; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
-        .intro-card-icon { width: 44px; height: 44px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: white; font-size: 20px; }
-        .intro-card h3 { font-size: 17px; font-weight: 600; color: #111827; margin-bottom: 8px; }
-        .intro-card p { font-size: 14px; color: #6b7280; line-height: 1.6; }
+        .btn-primary:hover { background: #059669; }
         .modules-section { padding: 100px 40px; background: #f9fafb; }
         .modules-container { max-width: 1100px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-label { display: inline-block; font-size: 13px; font-weight: 600; color: #10b981; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+        .section-header h2 { font-size: 36px; font-weight: 700; color: #111827; margin-bottom: 16px; }
+        .section-header p { font-size: 16px; color: #6b7280; }
         .modules-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-        .module-card { background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: flex-start; gap: 16px; }
+        .module-card { background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 24px; cursor: pointer; transition: all 0.3s; display: flex; align-items: flex-start; gap: 16px; }
         .module-card:hover { border-color: #10b981; box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
         .module-number { width: 40px; height: 40px; background: #f0fdf4; border: 1px solid #10b981; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600; color: #10b981; flex-shrink: 0; }
         .module-card:hover .module-number { background: #10b981; color: white; }
@@ -55,123 +39,48 @@
         .module-tag { background: #f3f4f6; color: #6b7280; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 500; }
         .learn-page { display: none; height: 100vh; overflow: hidden; }
         .learn-page.active { display: flex; flex-direction: column; }
-        .learn-header { height: 56px; background: white; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; }
-        .learn-header-left { display: flex; align-items: center; gap: 12px; }
-        .back-btn { display: flex; align-items: center; gap: 6px; background: none; border: none; color: #6b7280; font-size: 14px; font-weight: 500; cursor: pointer; padding: 8px 12px; border-radius: 6px; transition: all 0.2s; }
-        .back-btn:hover { background: #f3f4f6; color: #111827; }
-        .header-divider { width: 1px; height: 20px; background: #e5e7eb; }
+        .learn-header { height: 56px; background: white; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; padding: 0 24px; }
+        .back-btn { display: flex; align-items: center; gap: 6px; background: none; border: none; color: #6b7280; font-size: 14px; font-weight: 500; cursor: pointer; padding: 8px 12px; border-radius: 6px; }
+        .back-btn:hover { background: #f3f4f6; }
         .learn-title { font-size: 14px; font-weight: 600; color: #111827; }
         .learn-title-badge { background: #10b981; color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; margin-right: 8px; }
-        .learn-header-right { display: flex; align-items: center; gap: 8px; }
-        .mode-tabs { display: flex; background: #f3f4f6; border-radius: 8px; padding: 4px; }
-        .mode-tab { padding: 8px 16px; border: none; background: none; font-size: 13px; font-weight: 500; color: #6b7280; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
-        .mode-tab.active { background: white; color: #111827; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .code-toolbar { height: 44px; background: white; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; padding: 0 12px; gap: 8px; }
+        .toolbar-btn { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid #e5e7eb; }
+        .toolbar-btn.run { background: #10b981; border-color: #10b981; color: white; }
+        .toolbar-btn.run:hover { background: #059669; }
+        .toolbar-btn.disabled { opacity: 0.5; cursor: not-allowed; }
+        .code-main { flex: 1; display: flex; overflow: hidden; }
+        .code-input-wrapper { flex: 1; background: white; }
+        .code-input { width: 100%; height: 100%; background: transparent; color: #111827; border: none; padding: 16px; font-family: monospace; font-size: 13px; line-height: 1.6; resize: none; outline: none; }
+        .output-panel { height: 180px; background: white; border-top: 1px solid #e5e7eb; display: flex; flex-direction: column; }
+        .output-header { height: 32px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; padding: 0 12px; }
+        .output-header-title { font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; }
+        .output-content { flex: 1; overflow: auto; padding: 12px 16px; font-family: monospace; font-size: 12px; line-height: 1.6; color: #374151; white-space: pre-wrap; }
         .loading-indicator { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #6b7280; }
         .loading-spinner { width: 16px; height: 16px; border: 2px solid #e5e7eb; border-top-color: #10b981; border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .learn-main { flex: 1; display: flex; overflow: hidden; }
-        .knowledge-panel { width: 400px; background: white; border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; overflow: hidden; }
-        .knowledge-header { padding: 16px 20px; border-bottom: 1px solid #e5e7eb; background: #f9fafb; flex-shrink: 0; }
-        .knowledge-header h2 { font-size: 13px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; }
-        .knowledge-content { flex: 1; overflow-y: auto; padding: 20px; }
-        .knowledge-section { margin-bottom: 24px; }
-        .knowledge-section-title { font-size: 12px; font-weight: 600; color: #10b981; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .knowledge-section-title::after { content: ''; flex: 1; height: 1px; background: #e5e7eb; }
-        .knowledge-intro { background: #f0fdf4; border: 1px solid #d1fae5; border-radius: 8px; padding: 16px; }
-        .knowledge-intro p { font-size: 13px; color: #374151; line-height: 1.7; margin-bottom: 10px; }
-        .knowledge-intro ul { margin: 0; padding-left: 16px; }
-        .knowledge-intro li { font-size: 12px; color: #4b5563; margin-bottom: 4px; line-height: 1.5; }
-        .methods-table { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; }
-        .methods-table table { width: 100%; border-collapse: collapse; }
-        .methods-table th, .methods-table td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #e5e7eb; }
-        .methods-table th { background: #f3f4f6; font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; }
-        .methods-table td { font-size: 12px; color: #4b5563; }
-        .methods-table td:first-child { font-family: monospace; color: #10b981; font-size: 11px; }
-        .methods-table tr:last-child td { border-bottom: none; }
-        .code-example { background: #1f2937; border-radius: 8px; overflow: hidden; }
-        .code-example-header { background: #111827; padding: 8px 12px; border-bottom: 1px solid #374151; display: flex; align-items: center; gap: 6px; }
-        .code-example-dot { width: 10px; height: 10px; border-radius: 50%; }
-        .code-example-dot.red { background: #ef4444; }
-        .code-example-dot.yellow { background: #f59e0b; }
-        .code-example-dot.green { background: #22c55e; }
-        .code-example pre { margin: 0; padding: 16px; font-family: monospace; font-size: 12px; line-height: 1.6; color: #e5e7eb; overflow-x: auto; white-space: pre-wrap; }
-        .test-task { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 8px; padding: 16px; }
-        .test-task-label { font-size: 11px; font-weight: 600; color: #b45309; text-transform: uppercase; margin-bottom: 6px; }
-        .test-task p { font-size: 13px; color: #78350f; line-height: 1.5; }
-        .code-panel { flex: 1; display: flex; flex-direction: column; background: #f9fafb; overflow: hidden; }
-        .code-tabs { height: 40px; background: white; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; padding: 0 12px; gap: 4px; }
-        .code-tab { display: flex; align-items: center; gap: 6px; padding: 6px 12px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 6px 6px 0 0; margin-bottom: -1px; font-size: 12px; color: #6b7280; cursor: pointer; }
-        .code-tab.active { background: white; border-bottom-color: white; color: #111827; }
-        .code-toolbar { height: 44px; background: white; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; justify-content: space-between; padding: 0 12px; }
-        .code-toolbar-left { display: flex; align-items: center; gap: 8px; }
-        .toolbar-btn { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s; border: 1px solid #e5e7eb; }
-        .toolbar-btn.run { background: #10b981; border-color: #10b981; color: white; }
-        .toolbar-btn.run:hover { background: #059669; }
-        .toolbar-btn.hint { background: #3b82f6; border-color: #3b82f6; color: white; }
-        .toolbar-btn.hint:hover { background: #2563eb; }
-        .toolbar-btn.clear { background: white; color: #6b7280; }
-        .toolbar-btn.clear:hover { background: #f3f4f6; }
-        .toolbar-btn.disabled { opacity: 0.5; cursor: not-allowed; }
-        .code-toolbar-right { font-size: 12px; color: #9ca3af; display: flex; align-items: center; gap: 6px; }
-        .status-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; }
-        .status-dot.loading { background: #f59e0b; }
-        .status-dot.error { background: #dc2626; }
-        .code-main { flex: 1; display: flex; overflow: hidden; }
-        .code-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
-        .code-wrapper { flex: 1; display: flex; overflow: hidden; background: white; }
-        .line-numbers { width: 44px; background: #f9fafb; border-right: 1px solid #e5e7eb; padding: 16px 0; text-align: right; font-family: monospace; font-size: 12px; line-height: 1.6; color: #9ca3af; user-select: none; overflow: hidden; }
-        .line-numbers span { display: block; padding-right: 12px; }
-        .code-input-wrapper { flex: 1; position: relative; overflow: hidden; }
-        .code-input { width: 100%; height: 100%; background: transparent; color: #111827; border: none; padding: 16px; font-family: monospace; font-size: 13px; line-height: 1.6; resize: none; outline: none; white-space: pre; overflow: auto; }
-        .code-input::placeholder { color: #9ca3af; }
-        .output-panel { height: 180px; background: white; border-top: 1px solid #e5e7eb; display: flex; flex-direction: column; flex-shrink: 0; }
-        .output-header { height: 32px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; display: flex; align-items: center; padding: 0 12px; }
-        .output-header-title { font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; }
-        .output-content { flex: 1; overflow: auto; padding: 12px 16px; font-family: monospace; font-size: 12px; line-height: 1.6; color: #374151; white-space: pre-wrap; }
-        .output-content .success { color: #059669; }
-        .output-content .error { color: #dc2626; }
-        .output-content .info { color: #3b82f6; }
-        .output-content img { max-width: 100%; border-radius: 4px; margin-top: 8px; }
-        @media (max-width: 1024px) { .intro-grid { grid-template-columns: repeat(2, 1fr); } .modules-grid { grid-template-columns: 1fr; } .knowledge-panel { width: 340px; } }
-        @media (max-width: 768px) { .navbar { padding: 0 20px; } .navbar-links { display: none; } .hero { padding: 80px 20px 60px; } .hero h1 { font-size: 36px; } .intro-section, .modules-section { padding: 60px 20px; } .intro-grid { grid-template-columns: 1fr; } .learn-main { flex-direction: column; } .knowledge-panel { width: 100%; height: 40vh; } }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .animate-in { animation: fadeIn 0.4s ease forwards; }
     </style>
 </head>
 <body>
     <div class="home-page" id="homePage">
         <nav class="navbar">
             <div class="navbar-brand"><div class="navbar-brand-icon">📊</div>Pandas 数据分析实战训练营</div>
-            <div class="navbar-links"><a href="#intro" class="navbar-link">介绍</a><a href="#modules" class="navbar-link">模块</a></div>
         </nav>
         <section class="hero">
             <div class="hero-content">
                 <div class="hero-badge">🚀 纯前端 Python 运行环境</div>
                 <h1>掌握 <span>Pandas</span><br>数据分析核心技能</h1>
-                <p class="hero-description">从零开始学习 Pandas，通过实战练习掌握数据加载、清洗、分析等十大核心技能，所有代码直接在浏览器中运行</p>
-                <div class="hero-cta">
-                    <button class="btn btn-primary" onclick="scrollToModules()">开始学习 →</button>
-                    <button class="btn btn-secondary" onclick="scrollToIntro()">了解更多</button>
-                </div>
-            </div>
-        </section>
-        <section class="intro-section" id="introSection">
-            <div class="intro-container">
-                <div class="section-header"><span class="section-label">为什么选择我们</span><h2>纯前端数据分析环境</h2><p>基于 Pyodide WebAssembly 技术，Python 代码直接在浏览器中运行，无需安装任何软件</p></div>
-                <div class="intro-grid">
-                    <div class="intro-card"><div class="intro-card-icon">📦</div><h3>无需安装</h3><p>所有代码在浏览器中运行，无需安装 Python 或任何依赖库</p></div>
-                    <div class="intro-card"><div class="intro-card-icon">⚡</div><h3>即时运行</h3><p>代码修改后立即执行，所见即所得的学习体验</p></div>
-                    <div class="intro-card"><div class="intro-card-icon">🔒</div><h3>安全隔离</h3><p>代码运行在沙箱环境中，保护您的隐私和数据安全</p></div>
-                </div>
+                <p class="hero-description">从零开始学习 Pandas，通过实战练习掌握数据加载、清洗、分析等十大核心技能</p>
+                <button class="btn btn-primary" onclick="scrollToModules()">开始学习 →</button>
             </div>
         </section>
         <section class="modules-section" id="modulesSection">
             <div class="modules-container">
-                <div class="section-header"><span class="section-label">课程模块</span><h2>十大核心技能</h2><p>从基础到进阶，循序渐进掌握 Pandas 数据分析</p></div>
+                <div class="section-header">
+                    <span class="section-label">课程模块</span>
+                    <h2>十大核心技能</h2>
+                    <p>从基础到进阶，循序渐进掌握 Pandas 数据分析</p>
+                </div>
                 <div class="modules-grid" id="modulesGrid"></div>
             </div>
         </section>
@@ -179,55 +88,26 @@
 
     <div class="learn-page" id="learnPage">
         <header class="learn-header">
-            <div class="learn-header-left">
-                <button class="back-btn" onclick="goHome()">← 返回</button>
-                <div class="header-divider"></div>
-                <span class="learn-title"><span class="learn-title-badge" id="skillBadge">01</span><span id="learnTitle">数据加载与查看</span></span>
-            </div>
-            <div class="learn-header-right">
-                <div class="mode-tabs">
-                    <button class="mode-tab active" data-mode="learn" onclick="switchLearnMode('learn')">学习</button>
-                    <button class="mode-tab" data-mode="test" onclick="switchLearnMode('test')">测试</button>
-                </div>
-                <div class="loading-indicator" id="loadingIndicator" style="display: none;">
-                    <div class="loading-spinner"></div>
-                    <span>加载中...</span>
-                </div>
+            <button class="back-btn" onclick="goHome()">← 返回首页</button>
+            <span class="learn-title"><span class="learn-title-badge" id="skillBadge">01</span><span id="learnTitle">数据加载与查看</span></span>
+            <div class="loading-indicator" id="loadingIndicator" style="display: none;">
+                <div class="loading-spinner"></div>
+                <span>加载中...</span>
             </div>
         </header>
-        <div class="learn-main">
-            <div class="knowledge-panel">
-                <div class="knowledge-header"><h2>知识点</h2></div>
-                <div class="knowledge-content" id="knowledgeContent"></div>
+        <div class="code-main">
+            <div class="code-input-wrapper">
+                <textarea class="code-input" id="codeInput" placeholder="在这里编写代码..." spellcheck="false"></textarea>
             </div>
-            <div class="code-panel">
-                <div class="code-tabs"><div class="code-tab active"><span>📄</span> main.py</div></div>
-                <div class="code-toolbar">
-                    <div class="code-toolbar-left">
-                        <button class="toolbar-btn run" id="runBtn" onclick="runCode()" disabled>▶ 运行</button>
-                        <button class="toolbar-btn hint" onclick="showHint()">💡 提示</button>
-                        <button class="toolbar-btn clear" onclick="clearCode()">清空</button>
-                    </div>
-                    <div class="code-toolbar-right">
-                        <span class="status-dot" id="statusDot"></span>
-                        <span id="statusText">Python 3.x</span>
-                    </div>
-                </div>
-                <div class="code-main">
-                    <div class="code-area">
-                        <div class="code-wrapper">
-                            <div class="line-numbers" id="lineNumbers"></div>
-                            <div class="code-input-wrapper">
-                                <textarea class="code-input" id="codeInput" placeholder="# 在这里编写代码...&#10;# 学习 Pandas 数据分析" spellcheck="false"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="output-panel">
-                    <div class="output-header"><span class="output-header-title">输出</span></div>
-                    <div class="output-content" id="outputContent">⏳ 正在初始化 Python 环境...</div>
-                </div>
-            </div>
+        </div>
+        <div class="code-toolbar">
+            <button class="toolbar-btn run" id="runBtn" onclick="runCode()" disabled>▶ 运行代码</button>
+            <button class="toolbar-btn" onclick="clearCode()">清空</button>
+            <span id="statusText" style="margin-left: auto; font-size: 12px; color: #9ca3af;">Python 3.x</span>
+        </div>
+        <div class="output-panel">
+            <div class="output-header"><span class="output-header-title">输出</span></div>
+            <div class="output-content" id="outputContent">⏳ 正在初始化 Python 环境...</div>
         </div>
     </div>
 
@@ -237,755 +117,71 @@ const skillData = {
         title: "数据加载与基础查看",
         description: "学习如何从CSV、Excel等文件加载数据，并查看数据的基本信息",
         tags: ["read_csv", "head", "info", "describe"],
-        dataset: "sales_data.csv",
-        intro: "数据加载是数据分析的第一步。本项目使用销售数据集，包含订单日期、产品类别、销售额、数量、地区等字段。我们将学习如何正确加载数据并快速了解数据概况。",
-        keyPoints: [
-            "第一步：导入pandas库 - 使用import pandas as pd",
-            "第二步：创建数据 - 学习DataFrame的基本结构",
-            "第三步：查看数据前5行 - 使用df.head()快速预览",
-            "第四步：查看数据信息 - 使用df.info()了解数据类型",
-            "第五步：统计摘要 - 使用df.describe()查看数值列统计信息"
-        ],
-        methods: [
-            { name: "import pandas as pd", desc: "导入pandas库" },
-            { name: "pd.DataFrame()", desc: "创建DataFrame" },
-            { name: "df.head(n)", desc: "查看前n行数据" },
-            { name: "df.info()", desc: "查看数据类型和非空值" },
-            { name: "df.describe()", desc: "数值列统计摘要" },
-            { name: "df.shape", desc: "查看数据形状(行数,列数)" }
-        ],
-        code: `# 数据加载与基础查看
-import pandas as pd
-
-print("=" * 60)
-print("数据加载与基础查看")
-print("=" * 60)
-
-# 创建示例销售数据
-data = {
-    "date": ["2023-01-01", "2023-01-02", "2023-01-03", "2023-01-04", "2023-01-05"],
-    "category": ["Electronics", "Clothing", "Electronics", "Books", "Clothing"],
-    "sales": [1200, 800, 1500, 450, 900],
-    "quantity": [5, 10, 3, 15, 6],
-    "region": ["North", "South", "East", "West", "North"]
-}
-
-df = pd.DataFrame(data)
-
-print("\n【查看数据前5行】")
-print("-" * 40)
-print(df.head())
-
-print("\n【查看数据信息】")
-print("-" * 40)
-df.info()
-
-print("\n【数值列统计摘要】")
-print("-" * 40)
-print(df.describe())
-
-print("\n【数据形状】")
-print("-" * 40)
-print(f"数据形状：{df.shape}")
-print(f"总行数：{df.shape[0]}")
-print(f"总列数：{df.shape[1]}")`,
-        hint: "数据加载步骤：\n1. import pandas as pd - 导入库\n2. pd.DataFrame(data) - 创建数据\n3. df.head() - 查看前5行\n4. df.info() - 查看数据信息\n5. df.describe() - 统计摘要",
-        testTask: "完成以下任务：1) 导入pandas库；2) 创建一个包含姓名、年龄、城市的DataFrame；3) 查看前3行；4) 查看数据形状；5) 查看数值列统计摘要"
+        code: "import pandas as pd\n\n# 创建示例数据\ndata = {\n    \"name\": [\"张三\", \"李四\", \"王五\"],\n    \"age\": [25, 30, 35],\n    \"city\": [\"北京\", \"上海\", \"深圳\"]\n}\ndf = pd.DataFrame(data)\n\nprint(\"数据预览：\")\nprint(df)\nprint(\"\\n数据形状：\", df.shape)\nprint(\"\\n数据类型：\")\nprint(df.dtypes)"
     },
     2: {
         title: "数据筛选与条件查询",
         description: "学习使用loc、iloc和布尔索引进行数据筛选和查询",
         tags: ["loc", "iloc", "布尔索引", "条件筛选"],
-        dataset: "sales_data.csv",
-        intro: "数据筛选是数据分析的核心技能。本项目学习如何使用不同的方法筛选数据，包括基于标签的loc、基于位置的iloc，以及布尔条件筛选。",
-        keyPoints: [
-            "第一步：单列筛选 - 选择特定列的数据",
-            "第二步：多列筛选 - 同时选择多个列",
-            "第三步：loc筛选 - 基于标签的条件筛选",
-            "第四步：iloc筛选 - 基于位置索引筛选",
-            "第五步：布尔条件 - 使用比较运算符筛选"
-        ],
-        methods: [
-            { name: "df['col']", desc: "选择单列" },
-            { name: "df[['col1','col2']]", desc: "选择多列" },
-            { name: "df.loc[]", desc: "基于标签的筛选" },
-            { name: "df.iloc[]", desc: "基于位置的筛选" },
-            { name: "df[df['col'] > x]", desc: "布尔条件筛选" },
-            { name: "& | ~", desc: "逻辑运算符(与、或、非)" }
-        ],
-        code: `# 数据筛选与条件查询
-import pandas as pd
-
-# 创建示例数据
-data = {
-    "name": ["张三", "李四", "王五", "赵六", "钱七"],
-    "age": [25, 30, 35, 40, 45],
-    "city": ["北京", "上海", "北京", "深圳", "北京"],
-    "salary": [8000, 12000, 15000, 20000, 18000]
-}
-df = pd.DataFrame(data)
-
-print("=" * 60)
-print("数据筛选与条件查询")
-print("=" * 60)
-
-print("\n【单列筛选】")
-print("-" * 40)
-print("选择salary列：")
-print(df['salary'])
-
-print("\n【多列筛选】")
-print("-" * 40)
-print("选择name、city、salary三列：")
-print(df[['name', 'city', 'salary']])
-
-print("\n【loc筛选 - 基于标签】")
-print("-" * 40)
-print("筛选salary大于10000的记录：")
-high_salary = df.loc[df['salary'] > 10000]
-print(high_salary)
-
-print("\n【iloc筛选 - 基于位置】")
-print("-" * 40)
-print("选择前3行，前2列：")
-print(df.iloc[:3, :2])
-
-print("\n【布尔条件筛选】")
-print("-" * 40)
-print("筛选城市为北京且薪资大于10000的记录：")
-condition = (df['city'] == '北京') & (df['salary'] > 10000)
-filtered = df[condition]
-print(filtered)`,
-        hint: "数据筛选方法：\n1. df['col'] - 选择单列\n2. df[['col1','col2']] - 选择多列\n3. df.loc[condition] - 标签筛选\n4. df.iloc[row, col] - 位置筛选\n5. (cond1) & (cond2) - 组合条件",
-        testTask: "完成以下任务：1) 选择姓名和薪资两列；2) 使用loc筛选薪资大于15000的记录；3) 使用布尔条件筛选年龄大于30且城市为北京的记录"
+        code: "import pandas as pd\n\ndata = {\n    \"name\": [\"张三\", \"李四\", \"王五\", \"赵六\"],\n    \"age\": [25, 30, 35, 40],\n    \"salary\": [8000, 12000, 15000, 20000]\n}\ndf = pd.DataFrame(data)\n\nprint(\"原始数据：\")\nprint(df)\n\nprint(\"\\n筛选年龄大于30的记录：\")\nprint(df[df['age'] > 30])"
     },
     3: {
         title: "缺失值检测与处理",
         description: "学习检测缺失值、分析缺失模式，并使用不同策略填充或删除",
         tags: ["isnull", "fillna", "dropna", "缺失值分析"],
-        dataset: "sales_data.csv",
-        intro: "缺失值是实际数据中的常见问题。本项目学习如何系统地检测缺失值、分析缺失模式，并根据不同情况选择合适的处理策略。",
-        keyPoints: [
-            "第一步：检测缺失值 - 使用isnull()检测缺失",
-            "第二步：统计缺失数量 - 计算每列缺失值个数",
-            "第三步：计算缺失比例 - 分析缺失值占比",
-            "第四步：删除缺失值 - 使用dropna()删除含缺失的行",
-            "第五步：填充缺失值 - 使用均值、中位数或固定值填充"
-        ],
-        methods: [
-            { name: "df.isnull()", desc: "检测缺失值，返回布尔矩阵" },
-            { name: "df.isnull().sum()", desc: "统计每列缺失数量" },
-            { name: "df.isnull().mean()", desc: "计算缺失比例" },
-            { name: "df.dropna()", desc: "删除包含缺失值的行" },
-            { name: "df.fillna()", desc: "填充缺失值" },
-            { name: "df.fillna(method='ffill')", desc: "前向填充" }
-        ],
-        code: `# 缺失值检测与处理
-import pandas as pd
-import numpy as np
-
-# 创建包含缺失值的数据
-data = {
-    "name": ["张三", "李四", "王五", "赵六", "钱七"],
-    "age": [25, np.nan, 35, 40, np.nan],
-    "city": ["北京", "上海", np.nan, "深圳", "杭州"],
-    "salary": [8000, 12000, np.nan, 20000, 18000]
-}
-df = pd.DataFrame(data)
-
-print("=" * 60)
-print("缺失值检测与处理")
-print("=" * 60)
-
-print("\n原始数据：")
-print(df)
-
-print("\n【检测缺失值】")
-print("-" * 40)
-print(df.isnull())
-
-print("\n【统计每列缺失数量】")
-print("-" * 40)
-print(df.isnull().sum())
-
-print("\n【计算缺失比例】")
-print("-" * 40)
-missing_ratio = df.isnull().mean() * 100
-print(missing_ratio.round(2))
-
-print("\n【删除缺失值】")
-print("-" * 40)
-df_clean = df.dropna()
-print(f"原始行数：{len(df)}, 删除后行数：{len(df_clean)}")
-print(df_clean)
-
-print("\n【填充缺失值】")
-print("-" * 40)
-df_filled = df.copy()
-df_filled['age'].fillna(df_filled['age'].median(), inplace=True)
-df_filled['salary'].fillna(df_filled['salary'].mean(), inplace=True)
-df_filled['city'].fillna('未知', inplace=True)
-print(df_filled)`,
-        hint: "缺失值处理步骤：\n1. df.isnull().sum() - 统计缺失数量\n2. df.isnull().mean() - 计算缺失比例\n3. df.dropna() - 删除缺失行\n4. df.fillna(value) - 用指定值填充\n5. df.fillna(method='ffill') - 前向填充",
-        testTask: "完成以下任务：1) 统计每列缺失值数量和比例；2) 删除包含缺失值的行；3) 用中位数填充age列，用均值填充salary列"
+        code: "import pandas as pd\nimport numpy as np\n\ndata = {\n    \"name\": [\"张三\", \"李四\", \"王五\"],\n    \"age\": [25, np.nan, 35],\n    \"score\": [85, 92, np.nan]\n}\ndf = pd.DataFrame(data)\n\nprint(\"包含缺失值的数据：\")\nprint(df)\n\nprint(\"\\n检测缺失值：\")\nprint(df.isnull().sum())\n\nprint(\"\\n用均值填充缺失值：\")\ndf_filled = df.fillna(df.mean())\nprint(df_filled)"
     },
     4: {
         title: "数据分组与聚合统计",
         description: "学习使用groupby进行数据分组，并进行各种聚合统计",
         tags: ["groupby", "agg", "sum", "mean", "count"],
-        dataset: "sales_data.csv",
-        intro: "分组聚合是数据分析的核心操作。本项目学习如何使用groupby对数据进行分组，并计算各种统计指标如总和、均值、计数等。",
-        keyPoints: [
-            "第一步：单列分组 - 按一个列进行分组",
-            "第二步：计算总和 - 使用sum()计算分组总和",
-            "第三步：计算均值 - 使用mean()计算分组平均值",
-            "第四步：多列分组 - 按多个列进行分组",
-            "第五步：多聚合函数 - 使用agg()同时计算多个统计量"
-        ],
-        methods: [
-            { name: "df.groupby('col')", desc: "按单列分组" },
-            { name: "group.sum()", desc: "计算分组总和" },
-            { name: "group.mean()", desc: "计算分组均值" },
-            { name: "group.count()", desc: "计算分组计数" },
-            { name: "group.agg()", desc: "多聚合函数" },
-            { name: "df.groupby(['col1','col2'])", desc: "多列分组" }
-        ],
-        code: `# 数据分组与聚合统计
-import pandas as pd
-
-# 创建销售数据
-data = {
-    "city": ["北京", "上海", "北京", "深圳", "北京", "上海", "深圳"],
-    "department": ["技术", "销售", "技术", "销售", "市场", "技术", "市场"],
-    "salary": [8000, 12000, 15000, 20000, 18000, 10000, 16000]
-}
-df = pd.DataFrame(data)
-
-print("=" * 60)
-print("数据分组与聚合统计")
-print("=" * 60)
-
-print("\n【单列分组】")
-print("-" * 40)
-grouped = df.groupby('city')
-print(f"分组数量：{len(grouped)}")
-
-print("\n【计算分组总和】")
-print("-" * 40)
-city_sales = df.groupby('city')['salary'].sum()
-print("各城市薪资总额：")
-print(city_sales.sort_values(ascending=False))
-
-print("\n【计算分组均值】")
-print("-" * 40)
-city_avg = df.groupby('city')['salary'].mean()
-print("各城市平均薪资：")
-print(city_avg.round(2))
-
-print("\n【多列分组】")
-print("-" * 40)
-multi_group = df.groupby(['city', 'department'])['salary'].sum()
-print("按城市和部门分组的薪资：")
-print(multi_group)
-
-print("\n【多聚合函数】")
-print("-" * 40)
-stats = df.groupby('city').agg({
-    'salary': ['sum', 'mean', 'count', 'max', 'min']
-})
-print("各城市多维度统计：")
-print(stats.round(2))`,
-        hint: "分组聚合步骤：\n1. df.groupby('col') - 按列分组\n2. group.sum() - 计算总和\n3. group.mean() - 计算均值\n4. group.agg({'col': ['sum','mean']}) - 多聚合\n5. df.groupby(['col1','col2']) - 多列分组",
-        testTask: "完成以下任务：1) 按部门分组计算薪资总额；2) 按城市分组计算平均薪资和人数；3) 使用agg()同时计算薪资的总和、均值、最大值"
+        code: "import pandas as pd\n\ndata = {\n    \"city\": [\"北京\", \"上海\", \"北京\", \"深圳\"],\n    \"sales\": [8000, 12000, 15000, 20000]\n}\ndf = pd.DataFrame(data)\n\nprint(\"按城市分组统计：\")\nprint(df.groupby('city')['sales'].sum())"
     },
     5: {
         title: "数据排序与排名计算",
         description: "学习对数据进行排序，并计算排名和百分比排名",
         tags: ["sort_values", "rank", "nlargest", "nsmallest"],
-        dataset: "sales_data.csv",
-        intro: "数据排序和排名帮助我们了解数据的顺序关系和相对位置。本项目学习如何对数据进行排序，并计算各种排名指标。",
-        keyPoints: [
-            "第一步：单列排序 - 按一个列进行升序或降序排序",
-            "第二步：多列排序 - 按多个列进行排序",
-            "第三步：计算排名 - 使用rank()计算排名",
-            "第四步：百分比排名 - 计算相对位置百分比",
-            "第五步：Top N选择 - 使用nlargest选择前N个"
-        ],
-        methods: [
-            { name: "df.sort_values()", desc: "按值排序" },
-            { name: "df.sort_index()", desc: "按索引排序" },
-            { name: "df.rank()", desc: "计算排名" },
-            { name: "df.nlargest()", desc: "最大的N个" },
-            { name: "df.nsmallest()", desc: "最小的N个" },
-            { name: "ascending=True/False", desc: "升序/降序" }
-        ],
-        code: `# 数据排序与排名计算
-import pandas as pd
-
-# 创建示例数据
-data = {
-    "name": ["张三", "李四", "王五", "赵六", "钱七", "孙八", "周九"],
-    "score": [85, 92, 78, 95, 88, 90, 83],
-    "subject": ["Math", "English", "Math", "English", "Math", "English", "Math"]
-}
-df = pd.DataFrame(data)
-
-print("=" * 60)
-print("数据排序与排名计算")
-print("=" * 60)
-
-print("\n原始数据：")
-print(df)
-
-print("\n【单列排序】")
-print("-" * 40)
-sorted_df = df.sort_values('score', ascending=False)
-print("按分数降序排序：")
-print(sorted_df)
-
-print("\n【多列排序】")
-print("-" * 40)
-multi_sorted = df.sort_values(['subject', 'score'], ascending=[True, False])
-print("先按科目升序，再按分数降序：")
-print(multi_sorted)
-
-print("\n【计算排名】")
-print("-" * 40)
-df['rank'] = df['score'].rank(ascending=False, method='dense')
-print("分数排名：")
-print(df[['name', 'score', 'rank']].sort_values('rank'))
-
-print("\n【百分比排名】")
-print("-" * 40)
-df['pct_rank'] = df['score'].rank(pct=True)
-print("分数百分比排名：")
-print(df[['name', 'score', 'pct_rank']])
-
-print("\n【Top N选择】")
-print("-" * 40)
-print("分数最高的3人：")
-print(df.nlargest(3, 'score'))
-print("\n分数最低的3人：")
-print(df.nsmallest(3, 'score'))`,
-        hint: "排序排名方法：\n1. df.sort_values('col', ascending=False) - 降序排序\n2. df.sort_values(['col1','col2']) - 多列排序\n3. df['col'].rank() - 计算排名\n4. df.nlargest(5, 'col') - 前5大\n5. df.nsmallest(5, 'col') - 前5小",
-        testTask: "完成以下任务：1) 按分数降序排序；2) 计算分数的密集排名；3) 找出分数最高的5人"
+        code: "import pandas as pd\n\ndata = {\n    \"name\": [\"张三\", \"李四\", \"王五\"],\n    \"score\": [85, 92, 78]\n}\ndf = pd.DataFrame(data)\n\nprint(\"按分数降序排序：\")\nprint(df.sort_values('score', ascending=False))\n\nprint(\"\\n计算排名：\")\ndf['rank'] = df['score'].rank(ascending=False)\nprint(df)"
     },
     6: {
         title: "数据透视表分析",
         description: "学习创建数据透视表，进行多维度数据分析",
         tags: ["pivot_table", "crosstab", "pivot", "melt"],
-        dataset: "sales_data.csv",
-        intro: "数据透视表是强大的多维度分析工具。本项目学习如何使用pivot_table创建透视表，以及使用crosstab创建交叉表进行数据分析。",
-        keyPoints: [
-            "第一步：基础透视表 - 创建简单的数据透视表",
-            "第二步：多维度透视 - 设置行、列、值多个维度",
-            "第三步：聚合函数 - 使用不同的聚合函数",
-            "第四步：交叉表 - 使用crosstab创建频数表",
-            "第五步：数据重塑 - 使用melt进行宽转长"
-        ],
-        methods: [
-            { name: "pd.pivot_table()", desc: "创建数据透视表" },
-            { name: "pd.crosstab()", desc: "创建交叉表" },
-            { name: "df.pivot()", desc: "数据透视" },
-            { name: "df.melt()", desc: "宽格式转长格式" },
-            { name: "aggfunc", desc: "聚合函数参数" },
-            { name: "fill_value", desc: "填充缺失值" }
-        ],
-        code: `# 数据透视表分析
-import pandas as pd
-
-# 创建销售数据
-data = {
-    "category": ["A", "B", "A", "C", "B", "A", "C", "B"],
-    "region": ["North", "South", "East", "West", "North", "South", "East", "West"],
-    "sales": [1000, 1500, 1200, 1800, 1600, 1300, 1900, 1400],
-    "profit": [200, 300, 240, 360, 320, 260, 380, 280]
-}
-df = pd.DataFrame(data)
-
-print("=" * 60)
-print("数据透视表分析")
-print("=" * 60)
-
-print("\n【基础透视表】")
-print("-" * 40)
-pivot1 = pd.pivot_table(df, values='sales', index='category', aggfunc='sum')
-print("按类别汇总的销售额：")
-print(pivot1)
-
-print("\n【多维度透视表】")
-print("-" * 40)
-pivot2 = pd.pivot_table(df, 
-                        values='sales', 
-                        index='category', 
-                        columns='region', 
-                        aggfunc='sum',
-                        fill_value=0)
-print("类别×地区的销售额透视表：")
-print(pivot2)
-
-print("\n【多聚合函数】")
-print("-" * 40)
-pivot3 = pd.pivot_table(df,
-                        values=['sales', 'profit'],
-                        index='category',
-                        aggfunc={'sales': ['sum', 'mean'], 'profit': 'sum'})
-print("多指标聚合：")
-print(pivot3.round(2))
-
-print("\n【交叉表】")
-print("-" * 40)
-cross_tab = pd.crosstab(df['category'], df['region'], margins=True)
-print("类别与地区的频数交叉表：")
-print(cross_tab)`,
-        hint: "透视表使用方法：\n1. pd.pivot_table(df, values, index, columns) - 创建透视表\n2. aggfunc='sum'/'mean' - 指定聚合函数\n3. pd.crosstab(index, columns) - 创建交叉表\n4. df.melt() - 宽转长\n5. fill_value=0 - 填充缺失值",
-        testTask: "完成以下任务：1) 创建一个按类别和地区分组的销售额透视表；2) 使用crosstab创建类别和地区的频数表；3) 使用多个聚合函数创建透视表"
+        code: "import pandas as pd\n\ndata = {\n    \"category\": [\"A\", \"B\", \"A\", \"B\"],\n    \"region\": [\"North\", \"South\", \"North\", \"South\"],\n    \"sales\": [1000, 1500, 1200, 1800]\n}\ndf = pd.DataFrame(data)\n\nprint(\"创建透视表：\")\nprint(pd.pivot_table(df, values='sales', index='category', columns='region', aggfunc='sum'))"
     },
     7: {
         title: "字符串数据处理",
         description: "学习处理文本数据，包括字符串分割、提取、替换和匹配",
         tags: ["str.split", "str.contains", "str.replace", "正则表达式"],
-        dataset: "sales_data.csv",
-        intro: "字符串处理是数据清洗的重要部分。本项目学习如何使用Pandas的str访问器进行各种字符串操作，包括分割、提取、替换和匹配。",
-        keyPoints: [
-            "第一步：字符串分割 - 使用split分割字符串",
-            "第二步：字符串提取 - 提取特定位置的字符",
-            "第三步：字符串替换 - 替换指定的子串",
-            "第四步：字符串匹配 - 使用contains进行模式匹配",
-            "第五步：字符串长度 - 计算字符串长度"
-        ],
-        methods: [
-            { name: "str.split()", desc: "分割字符串" },
-            { name: "str.get()", desc: "获取指定位置元素" },
-            { name: "str.contains()", desc: "包含判断" },
-            { name: "str.replace()", desc: "替换字符串" },
-            { name: "str.extract()", desc: "正则提取" },
-            { name: "str.len()", desc: "计算字符串长度" }
-        ],
-        code: `# 字符串数据处理
-import pandas as pd
-
-# 创建包含字符串的数据
-data = {
-    "name": ["张三", "李四", "王五", "赵六", "钱七"],
-    "email": ["zhangsan@example.com", "lisi@company.com", 
-              "wangwu@gmail.com", "zhaoliu@test.org", "qianqi@domain.net"],
-    "phone": ["13812345678", "13987654321", "13712345678", 
-              "13687654321", "13512345678"],
-    "product": ["CAT-A-001", "CAT-B-002", "CAT-A-003", "CAT-C-004", "CAT-B-005"]
-}
-df = pd.DataFrame(data)
-
-print("=" * 60)
-print("字符串数据处理")
-print("=" * 60)
-
-print("\n【字符串分割】")
-print("-" * 40)
-df[['category', 'subcat', 'num']] = df['product'].str.split('-', expand=True)
-print(df[['product', 'category', 'subcat', 'num']])
-
-print("\n【提取邮箱域名】")
-print("-" * 40)
-df['domain'] = df['email'].str.split('@').str[1]
-print(df[['email', 'domain']])
-
-print("\n【字符串替换】")
-print("-" * 40)
-df['phone_masked'] = df['phone'].str.replace(r'(\d{3})\d{4}(\d{4})', r'\1****\2')
-print(df[['phone', 'phone_masked']])
-
-print("\n【字符串匹配】")
-print("-" * 40)
-mask = df['email'].str.contains('gmail|company')
-print("邮箱包含gmail或company的记录：")
-print(df[mask])
-
-print("\n【字符串长度】")
-print("-" * 40)
-df['name_len'] = df['name'].str.len()
-print(df[['name', 'name_len']])`,
-        hint: "字符串处理技巧：\n1. str.split('-').str[0] - 分割并取第一部分\n2. str[:4] - 提取前4个字符\n3. str.replace('old', 'new') - 替换字符串\n4. str.contains('pattern') - 模式匹配\n5. str.len() - 计算长度",
-        testTask: "完成以下任务：1) 将邮箱按'@'分割，提取用户名和域名；2) 筛选邮箱包含特定字符串的记录；3) 将手机号中间4位替换为*"
+        code: "import pandas as pd\n\ndata = {\n    \"name\": [\"张三\", \"李四\", \"王五\"],\n    \"email\": [\"zhangsan@example.com\", \"lisi@company.com\", \"wangwu@gmail.com\"]\n}\ndf = pd.DataFrame(data)\n\nprint(\"提取邮箱域名：\")\ndf['domain'] = df['email'].str.split('@').str[1]\nprint(df)\n\nprint(\"\\n筛选包含gmail的邮箱：\")\nprint(df[df['email'].str.contains('gmail')])"
     },
     8: {
         title: "时间序列数据处理",
         description: "学习处理日期时间数据，包括转换、提取、重采样等操作",
         tags: ["to_datetime", "dt", "resample", "时间索引"],
-        dataset: "sales_data.csv",
-        intro: "时间序列数据在金融、销售等领域非常常见。本项目学习如何处理日期时间数据，包括格式转换、组件提取、时间重采样等操作。",
-        keyPoints: [
-            "第一步：日期转换 - 使用to_datetime转换日期格式",
-            "第二步：设置索引 - 将日期设为索引便于时间分析",
-            "第三步：提取组件 - 提取年、月、日、星期等",
-            "第四步：时间筛选 - 按时间范围筛选数据",
-            "第五步：日期运算 - 计算日期差值"
-        ],
-        methods: [
-            { name: "pd.to_datetime()", desc: "转换为日期时间" },
-            { name: "df.set_index()", desc: "设置索引" },
-            { name: "dt.year/month/day", desc: "提取日期组件" },
-            { name: "dt.dayofweek", desc: "提取星期几" },
-            { name: "df.resample()", desc: "时间重采样" },
-            { name: "df.diff()", desc: "计算差值" }
-        ],
-        code: `# 时间序列数据处理
-import pandas as pd
-
-# 创建时间序列数据
-dates = pd.date_range('2023-01-01', periods=10, freq='D')
-data = {
-    "date": dates,
-    "sales": [1200, 1500, 1800, 1300, 1600, 2000, 1700, 1400, 1900, 2100],
-    "customers": [50, 60, 70, 55, 65, 80, 72, 58, 75, 85]
-}
-df = pd.DataFrame(data)
-
-print("=" * 60)
-print("时间序列数据处理")
-print("=" * 60)
-
-print("\n原始数据：")
-print(df)
-
-print("\n【日期转换】")
-print("-" * 40)
-df['date'] = pd.to_datetime(df['date'])
-print(f"日期列类型：{df['date'].dtype}")
-
-print("\n【提取日期组件】")
-print("-" * 40)
-df['year'] = df['date'].dt.year
-df['month'] = df['date'].dt.month
-df['day'] = df['date'].dt.day
-df['weekday'] = df['date'].dt.day_name()
-print(df[['date', 'year', 'month', 'day', 'weekday']])
-
-print("\n【时间筛选】")
-print("-" * 40)
-jan_data = df[(df['month'] == 1) & (df['day'] <= 5)]
-print("1月1日-5日的数据：")
-print(jan_data)
-
-print("\n【计算每日增长】")
-print("-" * 40)
-df['sales_growth'] = df['sales'].diff()
-df['growth_rate'] = df['sales'].pct_change() * 100
-print(df[['date', 'sales', 'sales_growth', 'growth_rate']])
-
-print("\n【移动平均】")
-print("-" * 40)
-df['sales_ma3'] = df['sales'].rolling(window=3).mean()
-print(df[['date', 'sales', 'sales_ma3']])`,
-        hint: "时间序列处理：\n1. pd.to_datetime(df['date']) - 转换日期\n2. df.set_index('date') - 设置时间索引\n3. df['date'].dt.year - 提取年份\n4. df['date'].dt.day_name() - 提取星期\n5. df.diff() - 计算差值",
-        testTask: "完成以下任务：1) 将日期列转换为datetime类型；2) 提取年、月、日和星期几；3) 计算销售额的日增长率和3日移动平均"
+        code: "import pandas as pd\n\ndata = {\n    \"date\": [\"2023-01-01\", \"2023-01-02\", \"2023-01-03\"],\n    \"sales\": [1200, 1500, 1800]\n}\ndf = pd.DataFrame(data)\n\ndf['date'] = pd.to_datetime(df['date'])\n\nprint(\"提取日期组件：\")\ndf['year'] = df['date'].dt.year\ndf['month'] = df['date'].dt.month\ndf['day'] = df['date'].dt.day\nprint(df)"
     },
     9: {
         title: "数据合并与连接",
         description: "学习使用merge、concat等方法合并多个数据集",
         tags: ["merge", "concat", "join", "数据整合"],
-        dataset: "sales_data.csv",
-        intro: "实际分析中经常需要合并多个数据源。本项目学习如何使用merge进行数据库风格的连接，以及使用concat进行数据拼接。",
-        keyPoints: [
-            "第一步：数据准备 - 创建示例数据用于演示合并",
-            "第二步：内连接 - 使用merge进行内连接",
-            "第三步：左连接 - 保留左表所有记录",
-            "第四步：多键连接 - 使用多个键进行连接",
-            "第五步：数据拼接 - 使用concat纵向或横向拼接"
-        ],
-        methods: [
-            { name: "pd.merge()", desc: "数据合并" },
-            { name: "how='inner'", desc: "内连接" },
-            { name: "how='left'", desc: "左连接" },
-            { name: "on='key'", desc: "指定连接键" },
-            { name: "pd.concat()", desc: "数据拼接" },
-            { name: "axis=0/1", desc: "拼接方向" }
-        ],
-        code: `# 数据合并与连接
-import pandas as pd
-
-# 创建示例数据
-df1 = pd.DataFrame({
-    'id': [1, 2, 3, 4, 5],
-    'name': ['张三', '李四', '王五', '赵六', '钱七'],
-    'department': ['技术', '销售', '技术', '销售', '市场']
-})
-
-df2 = pd.DataFrame({
-    'id': [1, 2, 3, 6, 7],
-    'salary': [8000, 12000, 15000, 20000, 18000],
-    'city': ['北京', '上海', '北京', '深圳', '杭州']
-})
-
-print("=" * 60)
-print("数据合并与连接")
-print("=" * 60)
-
-print("\n【表1 - 员工信息】")
-print(df1)
-
-print("\n【表2 - 薪资信息】")
-print(df2)
-
-print("\n【内连接】")
-print("-" * 40)
-merged_inner = pd.merge(df1, df2, on='id', how='inner')
-print("只保留两个表都有的记录：")
-print(merged_inner)
-
-print("\n【左连接】")
-print("-" * 40)
-merged_left = pd.merge(df1, df2, on='id', how='left')
-print("保留左表所有记录：")
-print(merged_left)
-
-print("\n【右连接】")
-print("-" * 40)
-merged_right = pd.merge(df1, df2, on='id', how='right')
-print("保留右表所有记录：")
-print(merged_right)
-
-print("\n【数据拼接】")
-print("-" * 40)
-df_part1 = df1.iloc[:3]
-df_part2 = df1.iloc[3:]
-concatenated = pd.concat([df_part1, df_part2], axis=0)
-print("纵向拼接结果：")
-print(concatenated)`,
-        hint: "数据合并方法：\n1. pd.merge(df1, df2, on='key') - 按键合并\n2. how='inner' - 内连接\n3. how='left' - 左连接\n4. pd.concat([df1, df2]) - 纵向拼接\n5. pd.concat([df1, df2], axis=1) - 横向拼接",
-        testTask: "完成以下任务：1) 创建两个DataFrame；2) 使用merge进行左连接；3) 使用concat将两个DataFrame纵向拼接"
+        code: "import pandas as pd\n\ndf1 = pd.DataFrame({\n    'id': [1, 2, 3],\n    'name': [\"张三\", \"李四\", \"王五\"]\n})\n\ndf2 = pd.DataFrame({\n    'id': [1, 2, 4],\n    'salary': [8000, 12000, 15000]\n})\n\nprint(\"左连接：\")\nmerged = pd.merge(df1, df2, on='id', how='left')\nprint(merged)"
     },
     10: {
         title: "数据导出与保存",
         description: "学习将处理后的数据导出到各种格式，包括CSV、JSON等",
         tags: ["to_csv", "to_json", "导出", "保存"],
-        dataset: "sales_data.csv",
-        intro: "数据分析的最后一步通常是将结果导出保存。本项目学习如何将DataFrame导出到CSV、JSON等格式，以及导出时的各种参数设置。",
-        keyPoints: [
-            "第一步：导出CSV - 使用to_csv保存为CSV文件",
-            "第二步：导出JSON - 使用to_json保存为JSON文件",
-            "第三步：选择列导出 - 只导出需要的列",
-            "第四步：设置导出参数 - 索引、编码等",
-            "第五步：格式化输出 - 美化输出格式"
-        ],
-        methods: [
-            { name: "df.to_csv()", desc: "导出为CSV" },
-            { name: "df.to_json()", desc: "导出为JSON" },
-            { name: "index=False", desc: "不导出索引" },
-            { name: "encoding='utf-8'", desc: "设置编码" },
-            { name: "columns=[]", desc: "选择导出列" },
-            { name: "orient='records'", desc: "JSON格式" }
-        ],
-        code: `# 数据导出与保存
-import pandas as pd
-
-# 创建示例数据
-data = {
-    "category": ["A", "B", "C", "A", "B"],
-    "sales": [1000, 1500, 1200, 1800, 1600],
-    "profit": [200, 300, 240, 360, 320]
-}
-df = pd.DataFrame(data)
-
-print("=" * 60)
-print("数据导出与保存")
-print("=" * 60)
-
-print("\n原始数据：")
-print(df)
-
-print("\n【导出为CSV】")
-print("-" * 40)
-csv_output = df.to_csv(index=False, encoding='utf-8')
-print("CSV格式输出：")
-print(csv_output)
-
-print("\n【导出为JSON】")
-print("-" * 40)
-json_output = df.to_json(orient='records', force_ascii=False, indent=2)
-print("JSON格式输出：")
-print(json_output)
-
-print("\n【选择列导出】")
-print("-" * 40)
-selected_csv = df[['category', 'sales']].to_csv(index=False)
-print("只导出类别和销售额：")
-print(selected_csv)
-
-print("\n【汇总数据导出】")
-print("-" * 40)
-summary = df.groupby('category').agg({
-    'sales': ['sum', 'mean'],
-    'profit': 'sum'
-}).round(2)
-summary.columns = ['总销售额', '平均销售额', '总利润']
-print("汇总数据：")
-print(summary)
-print("\n汇总数据CSV：")
-print(summary.reset_index().to_csv(index=False))`,
-        hint: "数据导出方法：\n1. df.to_csv('file.csv', index=False) - 导出CSV\n2. df.to_json('file.json') - 导出JSON\n3. encoding='utf-8' - 设置编码\n4. columns=['col1','col2'] - 选择导出列\n5. orient='records' - JSON格式",
-        testTask: "完成以下任务：1) 创建一个DataFrame；2) 导出为CSV格式；3) 导出为JSON格式"
+        code: "import pandas as pd\n\ndata = {\n    \"category\": [\"A\", \"B\", \"C\"],\n    \"sales\": [1000, 1500, 1200]\n}\ndf = pd.DataFrame(data)\n\nprint(\"导出为CSV格式：\")\nprint(df.to_csv(index=False))\n\nprint(\"\\n导出为JSON格式：\")\nprint(df.to_json(orient='records', indent=2))"
     }
 };
 
 let currentSkillId = 1;
-let currentMode = 'learn';
 let pyodide = null;
 
 document.addEventListener('DOMContentLoaded', async function() {
     renderModules();
-    updateLineNumbers();
-    document.getElementById('codeInput').addEventListener('input', updateLineNumbers);
-    document.getElementById('codeInput').addEventListener('scroll', syncScroll);
-    
     await initPyodide();
 });
-
-async function initPyodide() {
-    const outputContent = document.getElementById('outputContent');
-    const runBtn = document.getElementById('runBtn');
-    const statusDot = document.getElementById('statusDot');
-    const statusText = document.getElementById('statusText');
-    
-    try {
-        outputContent.innerHTML = '<span class="info">⏳ 正在加载 Python 运行环境...</span>';
-        statusDot.classList.add('loading');
-        statusText.textContent = '加载中...';
-        
-        pyodide = await loadPyodide({
-            indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.1/full/"
-        });
-        
-        await pyodide.loadPackage(['pandas', 'numpy']);
-        
-        statusDot.classList.remove('loading');
-        statusText.textContent = 'Python 3.11';
-        outputContent.innerHTML = '<span class="success">✅ Python 环境已就绪！</span><br><br>点击「运行」按钮执行代码';
-        runBtn.disabled = false;
-    } catch (error) {
-        statusDot.classList.remove('loading');
-        statusDot.classList.add('error');
-        statusText.textContent = '加载失败';
-        outputContent.innerHTML = `<span class="error">❌ 加载失败：${error.message}</span>`;
-    }
-}
-
-function updateLineNumbers() {
-    const textarea = document.getElementById('codeInput');
-    const lines = textarea.value.split('\n').length;
-    const lineNumbers = document.getElementById('lineNumbers');
-    let html = '';
-    for (let i = 1; i <= Math.max(lines, 20); i++) {
-        html += `<span>${i}</span>`;
-    }
-    lineNumbers.innerHTML = html;
-}
-
-function syncScroll() {
-    const textarea = document.getElementById('codeInput');
-    const lineNumbers = document.getElementById('lineNumbers');
-    lineNumbers.scrollTop = textarea.scrollTop;
-}
 
 function renderModules() {
     const grid = document.getElementById('modulesGrid');
@@ -993,18 +189,16 @@ function renderModules() {
     
     for (let i = 1; i <= 10; i++) {
         const skill = skillData[i];
-        html += `
-            <div class="module-card" onclick="openLearnPage(${i})">
-                <div class="module-number">${String(i).padStart(2, '0')}</div>
-                <div class="module-content">
-                    <h3>${skill.title}</h3>
-                    <p>${skill.description}</p>
-                    <div class="module-tags">
-                        ${skill.tags.map(tag => `<span class="module-tag">${tag}</span>`).join('')}
-                    </div>
-                </div>
-            </div>
-        `;
+        html += '<div class="module-card" onclick="openLearnPage(' + i + ')">';
+        html += '<div class="module-number">' + String(i).padStart(2, '0') + '</div>';
+        html += '<div class="module-content">';
+        html += '<h3>' + skill.title + '</h3>';
+        html += '<p>' + skill.description + '</p>';
+        html += '<div class="module-tags">';
+        skill.tags.forEach(function(tag) {
+            html += '<span class="module-tag">' + tag + '</span>';
+        });
+        html += '</div></div></div>';
     }
     
     grid.innerHTML = html;
@@ -1014,90 +208,16 @@ function scrollToModules() {
     document.getElementById('modulesSection').scrollIntoView({ behavior: 'smooth' });
 }
 
-function scrollToIntro() {
-    document.getElementById('introSection').scrollIntoView({ behavior: 'smooth' });
-}
-
 function openLearnPage(skillId) {
     currentSkillId = skillId;
-    currentMode = 'learn';
     
     document.getElementById('homePage').classList.add('hidden');
     document.getElementById('learnPage').classList.add('active');
     
     document.getElementById('learnTitle').textContent = skillData[skillId].title;
     document.getElementById('skillBadge').textContent = String(skillId).padStart(2, '0');
-    
-    renderKnowledge(skillId);
-    
     document.getElementById('codeInput').value = skillData[skillId].code;
-    document.getElementById('outputContent').innerHTML = '点击运行按钮执行代码...';
-    updateLineNumbers();
-    
-    document.querySelectorAll('.mode-tab').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.mode === 'learn');
-    });
-}
-
-function renderKnowledge(skillId) {
-    const skill = skillData[skillId];
-    const content = document.getElementById('knowledgeContent');
-    
-    let html = `
-        <div class="knowledge-section">
-            <div class="knowledge-section-title">概述</div>
-            <div class="knowledge-intro">
-                <p>${skill.intro}</p>
-                <ul>
-                    ${skill.keyPoints.map(point => `<li>${point}</li>`).join('')}
-                </ul>
-            </div>
-        </div>
-        
-        <div class="knowledge-section">
-            <div class="knowledge-section-title">常用方法</div>
-            <div class="methods-table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>方法</th>
-                            <th>说明</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${skill.methods.map(m => `
-                            <tr>
-                                <td>${m.name}</td>
-                                <td>${m.desc}</td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <div class="knowledge-section" id="codeSection">
-            <div class="knowledge-section-title">代码示例</div>
-            <div class="code-example">
-                <div class="code-example-header">
-                    <span class="code-example-dot red"></span>
-                    <span class="code-example-dot yellow"></span>
-                    <span class="code-example-dot green"></span>
-                </div>
-                <pre>${skill.code}</pre>
-            </div>
-        </div>
-        
-        <div class="knowledge-section" id="testSection" style="display: none;">
-            <div class="knowledge-section-title">测试任务</div>
-            <div class="test-task">
-                <div class="test-task-label">任务</div>
-                <p>${skill.testTask}</p>
-            </div>
-        </div>
-    `;
-    
-    content.innerHTML = html;
+    document.getElementById('outputContent').textContent = '点击运行按钮执行代码...';
 }
 
 function goHome() {
@@ -1105,71 +225,67 @@ function goHome() {
     document.getElementById('learnPage').classList.remove('active');
 }
 
-function switchLearnMode(mode) {
-    currentMode = mode;
+async function initPyodide() {
+    const outputContent = document.getElementById('outputContent');
+    const runBtn = document.getElementById('runBtn');
+    const statusText = document.getElementById('statusText');
     
-    document.querySelectorAll('.mode-tab').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.mode === mode);
-    });
-    
-    const codeSection = document.getElementById('codeSection');
-    const testSection = document.getElementById('testSection');
-    
-    if (mode === 'learn') {
-        codeSection.style.display = 'block';
-        testSection.style.display = 'none';
-        document.getElementById('codeInput').value = skillData[currentSkillId].code;
-    } else {
-        codeSection.style.display = 'none';
-        testSection.style.display = 'block';
-        document.getElementById('codeInput').value = '';
+    try {
+        outputContent.innerHTML = '<span style="color: #3b82f6;">⏳ 正在加载 Python 运行环境...</span>';
+        statusText.textContent = '加载中...';
+        
+        pyodide = await loadPyodide({
+            indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.1/full/"
+        });
+        
+        await pyodide.loadPackage(['pandas', 'numpy']);
+        
+        statusText.textContent = 'Python 3.11';
+        outputContent.innerHTML = '<span style="color: #059669;">✅ Python 环境已就绪！</span><br><br>点击「运行代码」按钮执行代码';
+        runBtn.disabled = false;
+    } catch (error) {
+        statusText.textContent = '加载失败';
+        outputContent.innerHTML = '<span style="color: #dc2626;">❌ 加载失败：' + error.message + '</span>';
     }
-    updateLineNumbers();
 }
 
 async function runCode() {
     const codeInput = document.getElementById('codeInput');
     const outputContent = document.getElementById('outputContent');
-    const statusDot = document.getElementById('statusDot');
     
     if (!codeInput.value.trim()) {
-        outputContent.innerHTML = '<span class="error">❌ 请输入代码后再运行</span>';
+        outputContent.innerHTML = '<span style="color: #dc2626;">❌ 请输入代码后再运行</span>';
         return;
     }
     
     if (!pyodide) {
-        outputContent.innerHTML = '<span class="error">❌ Python 环境未就绪</span>';
+        outputContent.innerHTML = '<span style="color: #dc2626;">❌ Python 环境未就绪</span>';
         return;
     }
     
-    statusDot.classList.add('loading');
-    outputContent.innerHTML = '<span class="info">⏳ 正在执行代码...</span>';
+    outputContent.innerHTML = '<span style="color: #3b82f6;">⏳ 正在执行代码...</span>';
     
     try {
         const code = codeInput.value;
         
         pyodide.globals.set('__console_output', '');
-        pyodide.runPython(`
-import sys
-from io import StringIO
-
-old_stdout = sys.stdout
-sys.stdout = captured_output = StringIO()
-
-try:
-${code.split('\n').map(line => '    ' + line).join('\n')}
-finally:
-    sys.stdout = old_stdout
-    __console_output = captured_output.getvalue()
-`);
+        pyodide.runPython(
+            'import sys\n' +
+            'from io import StringIO\n' +
+            'old_stdout = sys.stdout\n' +
+            'sys.stdout = captured_output = StringIO()\n' +
+            'try:\n' +
+            code.split('\n').map(line => '    ' + line).join('\n') + '\n' +
+            'finally:\n' +
+            '    sys.stdout = old_stdout\n' +
+            '    __console_output = captured_output.getvalue()'
+        );
         
         const output = pyodide.globals.get('__console_output');
         
-        statusDot.classList.remove('loading');
-        outputContent.innerHTML = '<span class="success">✅ 代码执行成功</span><br><br><pre>' + escapeHtml(output) + '</pre>';
+        outputContent.innerHTML = '<span style="color: #059669;">✅ 代码执行成功</span>\n\n' + escapeHtml(output);
     } catch (error) {
-        statusDot.classList.remove('loading');
-        outputContent.innerHTML = '<span class="error">❌ 执行错误：</span><br><br><pre>' + escapeHtml(error.message) + '</pre>';
+        outputContent.innerHTML = '<span style="color: #dc2626;">❌ 执行错误：</span>\n\n' + escapeHtml(error.message);
     }
 }
 
@@ -1180,15 +296,8 @@ function escapeHtml(text) {
 }
 
 function clearCode() {
-    document.getElementById('codeInput').value = '';
+    document.getElementById('codeInput').value = skillData[currentSkillId].code;
     document.getElementById('outputContent').textContent = '点击运行按钮执行代码...';
-    updateLineNumbers();
-}
-
-function showHint() {
-    const skill = skillData[currentSkillId];
-    const outputContent = document.getElementById('outputContent');
-    outputContent.innerHTML = `<span class="info">💡 提示：尝试使用 ${skill.methods.map(m => m.name).join('、')} 等方法</span>`;
 }
 </script>
 </body>
