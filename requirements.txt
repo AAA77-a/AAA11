@@ -1,3 +1,4 @@
-streamlit
+flask
 pandas
 numpy
+matplotlib
