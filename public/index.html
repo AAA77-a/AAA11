@@ -938,11 +938,53 @@ print("=" * 60)`,
 
 let currentSkillId = 1;
 let currentMode = 'learn';
+let pyodide = null;
+let pyodideLoading = false;
 
-// API 配置 - 部署后需要更新为实际的 Render 服务 URL
-const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? ''  // 本地使用相对路径
-    : 'https://pandas-training-api.onrender.com';  // Render 部署后的 URL
+async function loadPyodideRuntime() {
+    if (pyodide || pyodideLoading) return;
+    
+    const outputContent = document.getElementById('outputContent');
+    const statusText = document.querySelector('.code-toolbar-right');
+    
+    pyodideLoading = true;
+    outputContent.innerHTML = '<span class="info">⏳ 正在加载 Python 运行环境...</span><br><br>首次加载需要下载约 10MB 文件，请耐心等待...';
+    
+    try {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/pyodide.js';
+        document.head.appendChild(script);
+        
+        script.onload = async () => {
+            try {
+                pyodide = await window.loadPyodide({
+                    indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.1/full/'
+                });
+                
+                await pyodide.loadPackage(['pandas', 'numpy', 'micropip']);
+                
+                if (statusText) {
+                    statusText.innerHTML = '<span class="status-dot"></span>Python 3.11';
+                }
+                
+                outputContent.innerHTML = '<span class="success">✅ Python 环境已就绪！</span><br><br>💡 你现在可以编写和运行 Pandas 代码了。';
+                
+                pyodideLoading = false;
+            } catch (error) {
+                outputContent.innerHTML = '<span class="error">❌ 加载失败：' + error.message + '</span>';
+                pyodideLoading = false;
+            }
+        };
+        
+        script.onerror = () => {
+            outputContent.innerHTML = '<span class="error">❌ 加载 Pyodide 失败，请检查网络连接</span>';
+            pyodideLoading = false;
+        };
+    } catch (error) {
+        outputContent.innerHTML = '<span class="error">❌ 错误：' + error.message + '</span>';
+        pyodideLoading = false;
+    }
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     renderModules();
@@ -1105,7 +1147,7 @@ function switchLearnMode(mode) {
     }
 }
 
-function runCode() {
+async function runCode() {
     const codeInput = document.getElementById('codeInput');
     const outputContent = document.getElementById('outputContent');
     
@@ -1114,36 +1156,54 @@ function runCode() {
         return;
     }
     
+    if (!pyodide) {
+        outputContent.innerHTML = '<span class="info">⏳ Python 环境未就绪，正在加载...</span><br><br>';
+        loadPyodideRuntime();
+        return;
+    }
+    
     outputContent.innerHTML = '<span class="info">⏳ 正在执行代码...</span>';
     
-    fetch(`${API_BASE_URL}/api/execute`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            code: codeInput.value,
-            skill_id: currentSkillId
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
-            let output = '<span class="success">✅ 代码执行成功</span><br><br>';
-            output += '<pre>' + escapeHtml(data.output) + '</pre>';
-            
-            if (data.image) {
-                output += '<br><img src="data:image/png;base64,' + data.image + '" style="max-width: 100%; border-radius: 4px;">';
-            }
-            
-            outputContent.innerHTML = output;
-        } else {
-            outputContent.innerHTML = '<span class="error">❌ 执行错误：</span><br><br><pre>' + escapeHtml(data.output) + '</pre>';
+    try {
+        const code = codeInput.value;
+        const skillId = currentSkillId;
+        
+        pyodide.globals.set('__console_output', '');
+        
+        let setupCode = '';
+        let mainCode = code;
+        
+        pyodide.globals.set('__console_output', '');
+        pyodide.runPython(`
+import sys
+from io import StringIO
+__pyodide_stdout = StringIO()
+__pyodide_stderr = StringIO()
+sys.stdout = __pyodide_stdout
+sys.stderr = __pyodide_stderr
+try:
+`);
+        
+        try {
+            await pyodide.runPythonAsync(mainCode);
+        } catch (error) {
+            outputContent.innerHTML = '<span class="error">❌ 执行错误：</span><br><br><pre>' + escapeHtml(error.message) + '</pre>';
+            return;
         }
-    })
-    .catch(error => {
-        outputContent.innerHTML = '<span class="error">❌ 请求失败：' + error.message + '</span>';
-    });
+        
+        pyodide.runPython(`
+finally:
+    sys.stdout = sys.__stdout__
+    sys.stderr = sys.__stderr__
+    __console_output = __pyodide_stdout.getvalue()
+`);
+        
+        const output = pyodide.globals.get('__console_output');
+        
+        outputContent.innerHTML = '<span class="success">✅ 代码执行成功</span><br><br><pre>' + escapeHtml(output || '(无输出)') + '</pre>';
+    } catch (error) {
+        outputContent.innerHTML = '<span class="error">❌ 执行错误：</span><br><br><pre>' + escapeHtml(error.message) + '</pre>';
+    }
 }
 
 function escapeHtml(text) {
