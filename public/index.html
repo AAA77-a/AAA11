@@ -176,7 +176,7 @@ const skillData = {
 };
 
 let currentSkillId = 1;
-let pyodide = null;
+// API 配置
 
 document.addEventListener('DOMContentLoaded', async function() {
     renderModules();
@@ -208,6 +208,11 @@ function scrollToModules() {
     document.getElementById('modulesSection').scrollIntoView({ behavior: 'smooth' });
 }
 
+// API 基础 URL - 部署后需要更新为实际的 Render 服务 URL
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? ''  // 本地使用相对路径
+    : 'https://pandas-training-api.onrender.com';  // Render 部署后的 URL
+
 function openLearnPage(skillId) {
     currentSkillId = skillId;
     
@@ -217,36 +222,15 @@ function openLearnPage(skillId) {
     document.getElementById('learnTitle').textContent = skillData[skillId].title;
     document.getElementById('skillBadge').textContent = String(skillId).padStart(2, '0');
     document.getElementById('codeInput').value = skillData[skillId].code;
-    document.getElementById('outputContent').textContent = '点击运行按钮执行代码...';
+    document.getElementById('outputContent').innerHTML = '点击运行按钮执行代码...<br><br>💡 提示：你可以在左侧学习知识点，然后在右侧编写和运行 Pandas 代码进行练习。';
+    
+    // 启用运行按钮
+    document.getElementById('runBtn').disabled = false;
 }
 
 function goHome() {
     document.getElementById('homePage').classList.remove('hidden');
     document.getElementById('learnPage').classList.remove('active');
-}
-
-async function initPyodide() {
-    const outputContent = document.getElementById('outputContent');
-    const runBtn = document.getElementById('runBtn');
-    const statusText = document.getElementById('statusText');
-    
-    try {
-        outputContent.innerHTML = '<span style="color: #3b82f6;">⏳ 正在加载 Python 运行环境...</span>';
-        statusText.textContent = '加载中...';
-        
-        pyodide = await loadPyodide({
-            indexURL: "https://cdn.jsdelivr.net/pyodide/v0.26.1/full/"
-        });
-        
-        await pyodide.loadPackage(['pandas', 'numpy']);
-        
-        statusText.textContent = 'Python 3.11';
-        outputContent.innerHTML = '<span style="color: #059669;">✅ Python 环境已就绪！</span><br><br>点击「运行代码」按钮执行代码';
-        runBtn.disabled = false;
-    } catch (error) {
-        statusText.textContent = '加载失败';
-        outputContent.innerHTML = '<span style="color: #dc2626;">❌ 加载失败：' + error.message + '</span>';
-    }
 }
 
 async function runCode() {
@@ -258,34 +242,36 @@ async function runCode() {
         return;
     }
     
-    if (!pyodide) {
-        outputContent.innerHTML = '<span style="color: #dc2626;">❌ Python 环境未就绪</span>';
-        return;
-    }
-    
     outputContent.innerHTML = '<span style="color: #3b82f6;">⏳ 正在执行代码...</span>';
     
     try {
-        const code = codeInput.value;
+        const response = await fetch(`${API_BASE_URL}/api/execute`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                code: codeInput.value,
+                skill_id: currentSkillId
+            })
+        });
         
-        pyodide.globals.set('__console_output', '');
-        pyodide.runPython(
-            'import sys\n' +
-            'from io import StringIO\n' +
-            'old_stdout = sys.stdout\n' +
-            'sys.stdout = captured_output = StringIO()\n' +
-            'try:\n' +
-            code.split('\n').map(line => '    ' + line).join('\n') + '\n' +
-            'finally:\n' +
-            '    sys.stdout = old_stdout\n' +
-            '    __console_output = captured_output.getvalue()'
-        );
+        const data = await response.json();
         
-        const output = pyodide.globals.get('__console_output');
-        
-        outputContent.innerHTML = '<span style="color: #059669;">✅ 代码执行成功</span>\n\n' + escapeHtml(output);
+        if (data.status === 'success') {
+            let output = '<span style="color: #059669;">✅ 代码执行成功</span><br><br>';
+            output += '<pre>' + escapeHtml(data.output) + '</pre>';
+            
+            if (data.image) {
+                output += '<br><img src="data:image/png;base64,' + data.image + '" style="max-width: 100%; border-radius: 4px;">';
+            }
+            
+            outputContent.innerHTML = output;
+        } else {
+            outputContent.innerHTML = '<span style="color: #dc2626;">❌ 执行错误：</span><br><br><pre>' + escapeHtml(data.output) + '</pre>';
+        }
     } catch (error) {
-        outputContent.innerHTML = '<span style="color: #dc2626;">❌ 执行错误：</span>\n\n' + escapeHtml(error.message);
+        outputContent.innerHTML = '<span style="color: #dc2626;">❌ 请求失败：' + error.message + '</span><br><br>请确保后端服务已启动。';
     }
 }
 

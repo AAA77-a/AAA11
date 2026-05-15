@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify, render_template
+from flask_cors import CORS
 import pandas as pd
 import numpy as np
 import io
@@ -7,6 +8,7 @@ import base64
 from contextlib import redirect_stdout
 
 app = Flask(__name__)
+CORS(app, origins=["https://aaa11-eep.pages.dev", "http://localhost:8080", "http://127.0.0.1:8080"])
 
 def generate_sample_data(skill_id):
     if skill_id == 1:

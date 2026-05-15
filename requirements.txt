@@ -1,4 +1,6 @@
 flask
+flask-cors
+gunicorn
 pandas
 numpy
 matplotlib
