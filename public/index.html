@@ -941,6 +941,73 @@ let currentMode = 'learn';
 let pyodide = null;
 let pyodideLoading = false;
 
+// 数据集生成函数
+const datasets = {
+    1: () => pd.DataFrame({
+        "name": ["张三", "李四", "王五", "赵六", "钱七"],
+        "age": [25, 30, 35, 40, 45],
+        "city": ["北京", "上海", "北京", "深圳", "北京"],
+        "salary": [8000, 12000, 15000, 20000, 18000]
+    }),
+    2: () => pd.DataFrame({
+        "date": ["2024-01-01", "2024-01-02", "2024-01-03", "2024-01-04", "2024-01-05"],
+        "category": ["Electronics", "Clothing", "Electronics", "Food", "Clothing"],
+        "sales": [1200, 800, 1500, 500, 900],
+        "quantity": [3, 5, 2, 10, 4],
+        "region": ["华东", "华南", "华北", "华东", "华南"]
+    }),
+    3: () => pd.DataFrame({
+        "name": ["张三", "李四", "王五", "赵六", "钱七"],
+        "age": [25, np.nan, 35, 40, np.nan],
+        "city": ["北京", "上海", np.nan, "深圳", "杭州"],
+        "salary": [8000, 12000, np.nan, 20000, 18000]
+    }),
+    4: () => pd.DataFrame({
+        "city": ["北京", "上海", "北京", "深圳", "北京", "上海", "深圳"],
+        "department": ["技术", "销售", "技术", "销售", "市场", "技术", "市场"],
+        "salary": [8000, 12000, 15000, 20000, 18000, 10000, 16000]
+    }),
+    5: () => pd.DataFrame({
+        "id": [1, 2, 3, 4, 5],
+        "name": ["张三", "李四", "王五", "赵六", "钱七"],
+        "department": ["技术", "销售", "技术", "销售", "市场"]
+    }),
+    6: () => pd.DataFrame({
+        "name": ["张三", "李四", "王五", "赵六", "钱七"],
+        "salary": [8000, 12000, 15000, 20000, 18000],
+        "department": ["技术", "销售", "技术", "销售", "市场"]
+    }),
+    7: () => pd.DataFrame({
+        "name": ["张三", "李四", "王五", "赵六", "钱七"],
+        "chinese": [85, 92, 78, 95, 88],
+        "math": [90, 85, 95, 88, 92],
+        "english": [88, 90, 85, 92, 86]
+    }),
+    8: () => pd.DataFrame({
+        "name": ["张三", "李四", "王五", "赵六", "钱七"],
+        "email": ["zhangsan@example.com", "lisi@company.com", "wangwu@gmail.com", "zhaoliu@test.org", "qianqi@domain.net"],
+        "phone": ["13812345678", "13987654321", "13712345678", "13687654321", "13512345678"]
+    }),
+    9: () => {
+        const dates = Array.from({length: 10}, (_, i) => {
+            const d = new Date('2024-01-01');
+            d.setDate(d.getDate() + i);
+            return d.toISOString().split('T')[0];
+        });
+        return pd.DataFrame({
+            "date": dates,
+            "sales": [1200, 1500, 1800, 1300, 1600, 2000, 1700, 1400, 1900, 2100],
+            "customers": [50, 60, 70, 55, 65, 80, 72, 58, 75, 85]
+        });
+    },
+    10: () => pd.DataFrame({
+        "city": ["北京", "上海", "广州", "深圳", "北京", "上海", "广州", "深圳"],
+        "product": ["A", "B", "A", "C", "B", "A", "C", "B"],
+        "sales": [1000, 1500, 1200, 1800, 1600, 1300, 1900, 1400],
+        "profit": [200, 300, 240, 360, 320, 260, 380, 280]
+    })
+};
+
 async function loadPyodideRuntime() {
     if (pyodide || pyodideLoading) return;
     
@@ -963,11 +1030,14 @@ async function loadPyodideRuntime() {
                 
                 await pyodide.loadPackage(['pandas', 'numpy', 'micropip']);
                 
+                // 预加载数据集
+                await initializeDatasets();
+                
                 if (statusText) {
                     statusText.innerHTML = '<span class="status-dot"></span>Python 3.11';
                 }
                 
-                outputContent.innerHTML = '<span class="success">✅ Python 环境已就绪！</span><br><br>💡 你现在可以编写和运行 Pandas 代码了。';
+                outputContent.innerHTML = '<span class="success">✅ Python 环境已就绪！</span><br><br>💡 你现在可以编写和运行 Pandas 代码了。<br><br>📊 数据集 df 已自动加载，你可以直接使用。';
                 
                 pyodideLoading = false;
             } catch (error) {
@@ -984,6 +1054,26 @@ async function loadPyodideRuntime() {
         outputContent.innerHTML = '<span class="error">❌ 错误：' + error.message + '</span>';
         pyodideLoading = false;
     }
+}
+
+async function initializeDatasets() {
+    // 初始化全局数据集
+    pyodide.runPython(`
+import pandas as pd
+import numpy as np
+
+# 创建示例数据集
+df = pd.DataFrame({
+    "name": ["张三", "李四", "王五", "赵六", "钱七"],
+    "age": [25, 30, 35, 40, 45],
+    "city": ["北京", "上海", "北京", "深圳", "北京"],
+    "salary": [8000, 12000, 15000, 20000, 18000]
+})
+
+print("✅ 数据集已加载")
+print(f"📊 数据形状: {df.shape[0]} 行 × {df.shape[1]} 列")
+print(f"📋 列名: {', '.join(df.columns.tolist())}")
+`);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -1053,13 +1143,179 @@ function openLearnPage(skillId) {
     
     renderKnowledge(skillId);
     
-    document.getElementById('codeInput').value = '';
+    // 根据模块加载示例代码
+    document.getElementById('codeInput').value = skillData[skillId].code;
+    
+    // 如果 Pyodide 已加载，根据模块加载对应数据集
+    if (pyodide) {
+        loadModuleDataset(skillId);
+    }
+    
     document.getElementById('outputContent').innerHTML = '点击运行按钮执行代码...<br><br>💡 提示：你可以在左侧学习知识点，然后在右侧编写和运行 Pandas 代码进行练习。';
     updateLineNumbers();
     
     document.querySelectorAll('.mode-tab').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.mode === 'learn');
     });
+}
+
+async function loadModuleDataset(skillId) {
+    const datasetCode = {
+        1: `
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+    "name": ["张三", "李四", "王五", "赵六", "钱七"],
+    "age": [25, 30, 35, 40, 45],
+    "city": ["北京", "上海", "北京", "深圳", "北京"],
+    "salary": [8000, 12000, 15000, 20000, 18000]
+})
+
+print("✅ 数据集已加载")
+print(f"📊 数据形状: {df.shape[0]} 行 × {df.shape[1]} 列")
+print(f"📋 列名: {', '.join(df.columns.tolist())}")
+`,
+        2: `
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+    "date": ["2024-01-01", "2024-01-02", "2024-01-03", "2024-01-04", "2024-01-05"],
+    "category": ["Electronics", "Clothing", "Electronics", "Food", "Clothing"],
+    "sales": [1200, 800, 1500, 500, 900],
+    "quantity": [3, 5, 2, 10, 4],
+    "region": ["华东", "华南", "华北", "华东", "华南"]
+})
+
+print("✅ 数据集已加载")
+print(f"📊 数据形状: {df.shape[0]} 行 × {df.shape[1]} 列")
+print(f"📋 列名: {', '.join(df.columns.tolist())}")
+`,
+        3: `
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+    "name": ["张三", "李四", "王五", "赵六", "钱七"],
+    "age": [25, np.nan, 35, 40, np.nan],
+    "city": ["北京", "上海", np.nan, "深圳", "杭州"],
+    "salary": [8000, 12000, np.nan, 20000, 18000]
+})
+
+print("✅ 数据集已加载（包含缺失值）")
+print(f"📊 数据形状: {df.shape[0]} 行 × {df.shape[1]} 列")
+print(f"📋 缺失值统计:")
+print(df.isnull().sum())
+`,
+        4: `
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+    "city": ["北京", "上海", "北京", "深圳", "北京", "上海", "深圳"],
+    "department": ["技术", "销售", "技术", "销售", "市场", "技术", "市场"],
+    "salary": [8000, 12000, 15000, 20000, 18000, 10000, 16000]
+})
+
+print("✅ 数据集已加载")
+print(f"📊 数据形状: {df.shape[0]} 行 × {df.shape[1]} 列")
+print(f"📋 列名: {', '.join(df.columns.tolist())}")
+`,
+        5: `
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+    "id": [1, 2, 3, 4, 5],
+    "name": ["张三", "李四", "王五", "赵六", "钱七"],
+    "department": ["技术", "销售", "技术", "销售", "市场"]
+})
+
+print("✅ 数据集已加载")
+print(f"📊 数据形状: {df.shape[0]} 行 × {df.shape[1]} 列")
+print(f"📋 列名: {', '.join(df.columns.tolist())}")
+`,
+        6: `
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+    "name": ["张三", "李四", "王五", "赵六", "钱七"],
+    "salary": [8000, 12000, 15000, 20000, 18000],
+    "department": ["技术", "销售", "技术", "销售", "市场"]
+})
+
+print("✅ 数据集已加载")
+print(f"📊 数据形状: {df.shape[0]} 行 × {df.shape[1]} 列")
+print(f"📋 列名: {', '.join(df.columns.tolist())}")
+`,
+        7: `
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+    "name": ["张三", "李四", "王五", "赵六", "钱七"],
+    "chinese": [85, 92, 78, 95, 88],
+    "math": [90, 85, 95, 88, 92],
+    "english": [88, 90, 85, 92, 86]
+})
+
+print("✅ 数据集已加载")
+print(f"📊 数据形状: {df.shape[0]} 行 × {df.shape[1]} 列")
+print(f"📋 列名: {', '.join(df.columns.tolist())}")
+`,
+        8: `
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+    "name": ["张三", "李四", "王五", "赵六", "钱七"],
+    "email": ["zhangsan@example.com", "lisi@company.com", "wangwu@gmail.com", "zhaoliu@test.org", "qianqi@domain.net"],
+    "phone": ["13812345678", "13987654321", "13712345678", "13687654321", "13512345678"]
+})
+
+print("✅ 数据集已加载")
+print(f"📊 数据形状: {df.shape[0]} 行 × {df.shape[1]} 列")
+print(f"📋 列名: {', '.join(df.columns.tolist())}")
+`,
+        9: `
+import pandas as pd
+import numpy as np
+
+dates = pd.date_range('2024-01-01', periods=10, freq='D')
+df = pd.DataFrame({
+    "date": dates,
+    "sales": [1200, 1500, 1800, 1300, 1600, 2000, 1700, 1400, 1900, 2100],
+    "customers": [50, 60, 70, 55, 65, 80, 72, 58, 75, 85]
+})
+
+print("✅ 数据集已加载")
+print(f"📊 数据形状: {df.shape[0]} 行 × {df.shape[1]} 列")
+print(f"📋 列名: {', '.join(df.columns.tolist())}")
+`,
+        10: `
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+    "city": ["北京", "上海", "广州", "深圳", "北京", "上海", "广州", "深圳"],
+    "product": ["A", "B", "A", "C", "B", "A", "C", "B"],
+    "sales": [1000, 1500, 1200, 1800, 1600, 1300, 1900, 1400],
+    "profit": [200, 300, 240, 360, 320, 260, 380, 280]
+})
+
+print("✅ 数据集已加载")
+print(f"📊 数据形状: {df.shape[0]} 行 × {df.shape[1]} 列")
+print(f"📋 列名: {', '.join(df.columns.tolist())}")
+`
+    };
+    
+    try {
+        await pyodide.runPythonAsync(datasetCode[skillId] || datasetCode[1]);
+    } catch (error) {
+        console.error('加载数据集失败:', error);
+    }
 }
 
 function renderKnowledge(skillId) {
@@ -1162,47 +1418,64 @@ async function runCode() {
         return;
     }
     
-    outputContent.innerHTML = '<span class="info">⏳ 正在执行代码...</span>';
+    outputContent.innerHTML = '<span class="info">⏳ 正在执行代码...</span><br>';
     
     try {
         const code = codeInput.value;
         const skillId = currentSkillId;
         
-        pyodide.globals.set('__console_output', '');
+        // 自动加载对应模块的数据集
+        await loadModuleDataset(skillId);
         
-        let setupCode = '';
-        let mainCode = code;
-        
-        pyodide.globals.set('__console_output', '');
-        pyodide.runPython(`
+        // 设置输出捕获
+        await pyodide.runPythonAsync(`
 import sys
 from io import StringIO
-__pyodide_stdout = StringIO()
-__pyodide_stderr = StringIO()
-sys.stdout = __pyodide_stdout
-sys.stderr = __pyodide_stderr
-try:
+sys.stdout = StringIO()
+sys.stderr = StringIO()
 `);
         
+        // 执行用户代码
         try {
-            await pyodide.runPythonAsync(mainCode);
+            await pyodide.runPythonAsync(code);
         } catch (error) {
-            outputContent.innerHTML = '<span class="error">❌ 执行错误：</span><br><br><pre>' + escapeHtml(error.message) + '</pre>';
+            // 获取错误输出
+            const stderr = pyodide.runPython('sys.stderr.getvalue()');
+            const errorMsg = stderr || error.message;
+            
+            await pyodide.runPythonAsync(`
+sys.stdout = sys.__stdout__
+sys.stderr = sys.__stderr__
+`);
+            
+            outputContent.innerHTML = '<span class="error">❌ 执行错误：</span><br><br><pre style="color: #dc2626;">' + escapeHtml(errorMsg || error.message) + '</pre>';
             return;
         }
         
-        pyodide.runPython(`
-finally:
-    sys.stdout = sys.__stdout__
-    sys.stderr = sys.__stderr__
-    __console_output = __pyodide_stdout.getvalue()
+        // 获取输出
+        const stdout = pyodide.runPython('sys.stdout.getvalue()');
+        
+        // 恢复标准输出
+        await pyodide.runPythonAsync(`
+sys.stdout = sys.__stdout__
+sys.stderr = sys.__stderr__
 `);
         
-        const output = pyodide.globals.get('__console_output');
+        const output = stdout || '';
         
-        outputContent.innerHTML = '<span class="success">✅ 代码执行成功</span><br><br><pre>' + escapeHtml(output || '(无输出)') + '</pre>';
+        // 显示结果
+        let resultHtml = '<span class="success">✅ 代码执行成功</span><br>';
+        
+        if (output && output.trim()) {
+            resultHtml += '<br><pre>' + escapeHtml(output) + '</pre>';
+        } else {
+            resultHtml += '<br><span style="color: #6b7280;">(无输出)</span>';
+        }
+        
+        outputContent.innerHTML = resultHtml;
+        
     } catch (error) {
-        outputContent.innerHTML = '<span class="error">❌ 执行错误：</span><br><br><pre>' + escapeHtml(error.message) + '</pre>';
+        outputContent.innerHTML = '<span class="error">❌ 执行错误：</span><br><br><pre style="color: #dc2626;">' + escapeHtml(error.message) + '</pre>';
     }
 }
 
